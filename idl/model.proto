@@ -1,0 +1,19 @@
+
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "google/protobuf/timestamp.proto";
+
+package statestore;
+
+import "node.proto";
+import "pod.proto";
+import "deployment.proto";
+
+message Model {
+    string name = 1;
+}
+
+
+

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+package statestore;
+
+
+
+
+// Define the NodeStatus message
+message NodeStatus {
+    Resource capacity = 1; // The capacity of the node
+    string phase = 2; // The phase of the node (pending, running, terminated)
+}
+
+// Define the NodeSpec message
+message NodeSpec {
+    string taint = 1; // The taint of the node
+}
+
+// Define the Node message
+message Node {
+    ObjectType ot = 1; // The object type of the node
+
+    Metadata metadata = 2; // The metadata of the node
+
+    NodeSpec spec = 3; // The spec of the node
+
+    NodeStatus status = 4; // The status of the node
+}

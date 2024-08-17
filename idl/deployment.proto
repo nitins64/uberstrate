@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "common.proto";
+import "pod.proto";
+
+import "google/protobuf/timestamp.proto";
+
+package statestore;
+
+
+
+// Define the DeploymentStrategy enum
+enum DeploymentStrategy {
+    RECREATE = 0; // Recreate the deployment
+    ROLLING_UPDATE_ZONE_AT_TIME = 2; // Rolling update the deployment by zone at a time
+    ROLLING_UPDATE_ZONE_IN_PARALEL = 3; // Rolling update the deployment by zone in parallel
+}
+
+// Define the DeploymentSpec message
+message DeploymentSpec {
+    int32 replica_count = 1; // The replica count of the deployment
+    map<string, string> labels = 2; // The labels of the deployment
+
+    PodSpec spec = 3; // The spec of the deployment
+
+    DeploymentStrategy deployment_strategy = 4; // The deployment strategy
+}
+
+// Define the DeploymentStatus message
+message DeploymentStatus {
+    int64 observed_generation = 1; // The observed generation of the deployment
+
+    int64 replica_count = 2; // The replica count of the deployment
+
+    int64 desired_replica_count = 3; // The desired replica count of the deployment
+}
+
+// Define the Deployment message
+message Deployment {
+    ObjectType ot = 1; // The object type of the deployment
+
+    Metadata metadata = 2; // The metadata of the deployment
+
+    DeploymentSpec spec = 3; // The spec of the deployment
+
+    DeploymentStatus status = 4; // The status of the deployment
+}

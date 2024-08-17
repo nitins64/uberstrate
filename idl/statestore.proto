@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "model.proto";
+
+package statestore;
+
+service StateStoreService {
+  rpc SayHello(HelloWorldRequest) returns (HelloWorldResponse) {}
+  rpc ReLoadNodes(ReLoadNodeRequest) returns (ReLoadNodeResponse) {}
+  rpc PrintNodes(PrintNodeRequest) returns (PrintNodeResponse) {}
+}
+
+message ReLoadNodeRequest {
+    string path = 1;
+}
+
+message ReLoadNodeResponse {
+}
+
+message PrintNodeRequest {}
+
+message PrintNodeResponse {}
+
+message HelloWorldRequest {
+    string name = 1;
+}
+
+message HelloWorldResponse {
+  string message = 1;
+  Model model = 2;
+}

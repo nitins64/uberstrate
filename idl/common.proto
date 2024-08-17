@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "google/protobuf/timestamp.proto";
+
+package statestore;
+
+// Define the ObjectType message
+message ObjectType {
+    string version = 1; // The version of the object type
+    string kind = 2; // The kind of the object type
+}
+
+// Define the Metadata message
+message Metadata {
+    string name = 1; // The name of the object
+    string uuid = 2; // The UUID of the object
+
+    google.protobuf.Timestamp create_time = 3; // The creation time of the object
+    google.protobuf.Timestamp delete_time = 4; // The deletion time of the object
+
+    int64 generation_number = 5; // The generation number of the object
+    int64 version_number = 6; // The version number of the object
+
+    repeated string owner_uids = 7; // The UIDs of the owners of the object
+
+    map<string, string> labels = 8; // The labels associated with the object
+}
+
+// Define the Resource message
+message Resource {
+    int64 cpu = 1; // The CPU resource
+    int64 ram = 2; // The RAM resource
+    int64 storage = 3; // The storage resource
+}

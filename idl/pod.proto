@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+option go_package = "gitbub.com/uberstrate/idl";
+
+import "common.proto";
+
+import "google/protobuf/timestamp.proto";
+
+package statestore;
+
+// Define the RestartPolicy enum
+enum RestartPolicy {
+    ALWAYS = 0; // Always restart the object
+    ON_FAILURE = 1; // Restart the object only on failure
+    NEVER = 2; // Never restart the object
+}
+
+// Define the NodeAffinity message
+message NodeAffinity {
+    map<string, string> labels = 1; // The labels for node affinity
+}
+
+// Define the PodAffinity message
+message PodAffinity {
+    map<string, string> labels = 1; // The labels for pod affinity
+}
+
+// Define the PodAntiAffinity message
+message PodAntiAffinity {
+    map<string, string> labels = 1; // The labels for pod anti-affinity
+}
+
+// Define the Affinity message
+message Affinity {
+    NodeAffinity node_affinity = 1; // The node affinity
+    PodAffinity pod_affinity = 2; // The pod affinity
+    PodAntiAffinity pod_anti_affinity = 3; // The pod anti-affinity
+}
+
+// Define the TopologySpreadConstraint message
+message TopologySpreadConstraint {
+    int32 max_skew = 1; // The maximum skew allowed
+    string topology_key = 2; // The topology key
+}
+
+// Define the PodSpec message
+message PodSpec {
+    RestartPolicy restart_policy = 1; // The restart policy
+
+    string image = 2; // The image for the pod
+
+    int64 priority = 3; // The priority of the pod
+
+    TopologySpreadConstraint topology_spread_constraint = 4; // The topology spread constraint
+
+    Resource resource_requirement = 5; // The resource requirement
+}
+
+// Define the PodPhase enum
+enum PodPhase {
+    PENDING_NODE_ASSIGNMENT = 0; // The pod is pending node assignment
+    NODE_ASSIGNED = 1; // The pod is assigned to a node
+    RUNNING = 3; // The pod is running
+    FAILED = 4; // The pod has failed
+}
+
+// Define the QOSClass enum
+enum QOSClass {
+    GUARANTEED = 0; // The pod has guaranteed QoS
+    BURSTABLE = 1; // The pod has burstable QoS
+    BEST_EFFORT = 2; // The pod has best-effort QoS
+}
+
+// Define the PodStatus message
+message PodStatus {
+    PodPhase phase = 1; // The phase of the pod
+    string node_uid = 2; // The UID of the node where the pod is running
+    google.protobuf.Timestamp start_time = 3; // The start time of the pod
+    QOSClass qos_class = 4; // The QoS class of the pod
+}
+
+// Define the Pod message
+message Pod {
+    ObjectType ot = 1; // The object type of the pod
+
+    Metadata metadata = 2; // The metadata of the pod
+
+    PodSpec spec = 3; // The spec of the pod
+
+    PodStatus status = 4; // The status of the pod
+}
