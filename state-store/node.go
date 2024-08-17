@@ -1,8 +1,8 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 	"reflect"
 	"sync"
 
@@ -40,7 +40,8 @@ var (
 func GetNodeStore() *NodeStore {
 	once.Do(func() {
 		instance = &NodeStore{
-			NameToNode: make(map[string]Node),
+			NameToNode:      make(map[string]Node),
+			NameToNodeProto: make(map[string]*pb.Node),
 		}
 	})
 	return instance
@@ -55,6 +56,22 @@ func (ns *NodeStore) PrintNodes() error {
 	}
 	log.Printf("Generation: %d", ns.Generation)
 	return nil
+}
+
+func (ns *NodeStore) GetNodes(in *pb.GetNodeRequest) (nodes []*pb.Node) {
+	ns.mutex.Lock()
+	defer ns.mutex.Unlock()
+	log.Printf("Get nodes with AboveGenerationNumber: %d", in.AboveGenerationNumber)
+	log.Printf("Number of nodes: %d", len(ns.NameToNodeProto))
+
+	nodes = make([]*pb.Node, 0, len(ns.NameToNodeProto))
+	for _, node := range ns.NameToNodeProto {
+		if node.Metadata.GenerationNumber > in.AboveGenerationNumber {
+			nodes = append(nodes, node)
+		}
+	}
+	log.Printf("Total nodes: %d", len(nodes))
+	return nodes
 }
 
 func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
@@ -103,15 +120,16 @@ func (ns *NodeStore) ReLoad(filePath string) error {
 	if err != nil {
 		return err
 	}
-
 	ns.Generation++
 	for _, node := range nodes {
 		if _, exists := ns.NameToNode[node.Name]; exists {
 			log.Printf("Node %s already exists.", node.Name)
 			if reflect.DeepEqual(ns.NameToNode[node.Name], node) {
-				log.Printf("Node %s is unchanged.", node.Name)
 				continue
 			}
+			log.Printf("Node %s has changed, updating.", node.Name)
+		} else {
+			log.Printf("Adding new node %s.", node.Name)
 		}
 		ns.NameToNode[node.Name] = node
 		ns.NameToNodeProto[node.Name] = CreateProtoForNode(ns, node)
@@ -121,7 +139,7 @@ func (ns *NodeStore) ReLoad(filePath string) error {
 
 func loadNodes(filePath string) (node []Node, err error) {
 	// Read the YAML file
-	yamlFile, err := ioutil.ReadFile(filePath)
+	yamlFile, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatalf("Failed to read YAML file: %v", err)
 	}

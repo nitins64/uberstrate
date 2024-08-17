@@ -34,12 +34,22 @@ func HandleReloadNode(filePath string) {
 		log.Fatalf("error calling function ReLoadNodes: %v", err)
 	}
 
-	log.Printf("Response from gRPC server's ReLoadNodes function: %v", r)
+	log.Printf("Response from gRPC server's ReLoadNodes function: %+v", r)
 }
 
 func PrintNodes() {
 	c, ctx := getClientWithContext()
 	c.PrintNodes(ctx, &pb.PrintNodeRequest{})
+}
+
+func GetNodes(min_generation int64) {
+	log.Printf("Getting nodes with min_generation: %d", min_generation)
+	c, ctx := getClientWithContext()
+	r, err := c.GetNodes(ctx, &pb.GetNodeRequest{AboveGenerationNumber: min_generation})
+	if err != nil {
+		log.Fatalf("error calling function GetNodes: %v", err)
+	}
+	log.Printf("Response from gRPC server's GetNodes total node: %d", len(r.Nodes))
 }
 
 func getClientWithContext() (pb.StateStoreServiceClient, context.Context) {
@@ -72,6 +82,12 @@ func main() {
 		case "print":
 			// Handle print command
 			PrintNodes()
+		case "get":
+			get := flag.NewFlagSet("get", flag.ExitOnError)
+			min_generation := get.Int64("min_generation", 0, "")
+			get.Parse(os.Args[3:])
+			// Handle print command
+			GetNodes(*min_generation)
 		default:
 			log.Fatalf("unknown command: %s", os.Args[2])
 		}

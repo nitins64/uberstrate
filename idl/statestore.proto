@@ -3,6 +3,7 @@ syntax = "proto3";
 option go_package = "gitbub.com/uberstrate/idl";
 
 import "model.proto";
+import "node.proto";
 
 package statestore;
 
@@ -10,6 +11,7 @@ service StateStoreService {
   rpc SayHello(HelloWorldRequest) returns (HelloWorldResponse) {}
   rpc ReLoadNodes(ReLoadNodeRequest) returns (ReLoadNodeResponse) {}
   rpc PrintNodes(PrintNodeRequest) returns (PrintNodeResponse) {}
+  rpc GetNodes(GetNodeRequest) returns (GetNodeResponse) {}
 }
 
 message ReLoadNodeRequest {
@@ -19,9 +21,17 @@ message ReLoadNodeRequest {
 message ReLoadNodeResponse {
 }
 
-message PrintNodeRequest {}
 
-message PrintNodeResponse {}
+message PrintNodeRequest{}
+message PrintNodeResponse{}
+
+message GetNodeRequest {
+    int64 above_generation_number = 1;
+}
+
+message GetNodeResponse {
+    repeated Node nodes = 1;
+}
 
 message HelloWorldRequest {
     string name = 1;

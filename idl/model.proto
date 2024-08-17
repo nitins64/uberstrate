@@ -7,10 +7,6 @@ import "google/protobuf/timestamp.proto";
 
 package statestore;
 
-import "node.proto";
-import "pod.proto";
-import "deployment.proto";
-
 message Model {
     string name = 1;
 }

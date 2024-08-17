@@ -37,6 +37,12 @@ func (s *server) PrintNodes(ctx context.Context, in *pb.PrintNodeRequest) (*pb.P
 	return &pb.PrintNodeResponse{}, nil
 }
 
+func (s *server) GetNodes(ctx context.Context, in *pb.GetNodeRequest) (*pb.GetNodeResponse, error) {
+	nodeStore := GetNodeStore()
+	nodes := nodeStore.GetNodes(in)
+	return &pb.GetNodeResponse{Nodes: nodes}, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {

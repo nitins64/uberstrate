@@ -22,6 +22,7 @@ const (
 	StateStoreService_SayHello_FullMethodName    = "/statestore.StateStoreService/SayHello"
 	StateStoreService_ReLoadNodes_FullMethodName = "/statestore.StateStoreService/ReLoadNodes"
 	StateStoreService_PrintNodes_FullMethodName  = "/statestore.StateStoreService/PrintNodes"
+	StateStoreService_GetNodes_FullMethodName    = "/statestore.StateStoreService/GetNodes"
 )
 
 // StateStoreServiceClient is the client API for StateStoreService service.
@@ -31,6 +32,7 @@ type StateStoreServiceClient interface {
 	SayHello(ctx context.Context, in *HelloWorldRequest, opts ...grpc.CallOption) (*HelloWorldResponse, error)
 	ReLoadNodes(ctx context.Context, in *ReLoadNodeRequest, opts ...grpc.CallOption) (*ReLoadNodeResponse, error)
 	PrintNodes(ctx context.Context, in *PrintNodeRequest, opts ...grpc.CallOption) (*PrintNodeResponse, error)
+	GetNodes(ctx context.Context, in *GetNodeRequest, opts ...grpc.CallOption) (*GetNodeResponse, error)
 }
 
 type stateStoreServiceClient struct {
@@ -71,6 +73,16 @@ func (c *stateStoreServiceClient) PrintNodes(ctx context.Context, in *PrintNodeR
 	return out, nil
 }
 
+func (c *stateStoreServiceClient) GetNodes(ctx context.Context, in *GetNodeRequest, opts ...grpc.CallOption) (*GetNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetNodeResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_GetNodes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StateStoreServiceServer is the server API for StateStoreService service.
 // All implementations must embed UnimplementedStateStoreServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type StateStoreServiceServer interface {
 	SayHello(context.Context, *HelloWorldRequest) (*HelloWorldResponse, error)
 	ReLoadNodes(context.Context, *ReLoadNodeRequest) (*ReLoadNodeResponse, error)
 	PrintNodes(context.Context, *PrintNodeRequest) (*PrintNodeResponse, error)
+	GetNodes(context.Context, *GetNodeRequest) (*GetNodeResponse, error)
 	mustEmbedUnimplementedStateStoreServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedStateStoreServiceServer) ReLoadNodes(context.Context, *ReLoad
 }
 func (UnimplementedStateStoreServiceServer) PrintNodes(context.Context, *PrintNodeRequest) (*PrintNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PrintNodes not implemented")
+}
+func (UnimplementedStateStoreServiceServer) GetNodes(context.Context, *GetNodeRequest) (*GetNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNodes not implemented")
 }
 func (UnimplementedStateStoreServiceServer) mustEmbedUnimplementedStateStoreServiceServer() {}
 func (UnimplementedStateStoreServiceServer) testEmbeddedByValue()                           {}
@@ -172,6 +188,24 @@ func _StateStoreService_PrintNodes_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StateStoreService_GetNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StateStoreServiceServer).GetNodes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StateStoreService_GetNodes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StateStoreServiceServer).GetNodes(ctx, req.(*GetNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StateStoreService_ServiceDesc is the grpc.ServiceDesc for StateStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var StateStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PrintNodes",
 			Handler:    _StateStoreService_PrintNodes_Handler,
+		},
+		{
+			MethodName: "GetNodes",
+			Handler:    _StateStoreService_GetNodes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
