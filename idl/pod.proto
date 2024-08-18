@@ -79,6 +79,14 @@ message PodStatus {
     string node_uuid = 2; // The UID of the node where the pod is running
     google.protobuf.Timestamp start_time = 3; // The start time of the pod
     QOSClass qos_class = 4; // The QoS class of the pod
+    PodCondition condition = 5; // The condition of the pod
+}
+
+enum PodCondition {
+    READY = 0; // The pod is ready
+    NOT_READY = 1; // The pod is not ready
+    UNKNOWN = 2; // The pod is in an unknown state
+    REALLOCATION_REQUIRED = 3; // The pod requires reallocation
 }
 
 // Define the Pod message

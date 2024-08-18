@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type Allocator struct {
+type NodeAgent struct {
 	client pb.StateStoreServiceClient
 }
 
-func NewAllocator(client pb.StateStoreServiceClient) *Allocator {
-	return &Allocator{
+func NewNodeAgent(client pb.StateStoreServiceClient) *NodeAgent {
+	return &NodeAgent{
 		client: client,
 	}
 }
@@ -26,56 +26,59 @@ var podPhaseMap = map[string]pb.PodPhase{
 	"FAILED":                  pb.PodPhase_FAILED,
 }
 
-func (s *Allocator) getPods(all bool, phase string) ([]*pb.Pod, error) {
+func (n *NodeAgent) getPods(all bool, phase string) ([]*pb.Pod, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	r, err := s.client.GetPods(ctx, &pb.GetPodRequest{All: all, Phase: podPhaseMap[phase]})
+	r, err := n.client.GetPods(ctx, &pb.GetPodRequest{All: all, Phase: podPhaseMap[phase]})
 	if err != nil {
 		return nil, err
 	}
 	return r.Pods, nil
 }
 
-func (s *Allocator) getNodes(minGeneration int64) ([]*pb.Node, error) {
+func (n *NodeAgent) getNodes(minGeneration int64) ([]*pb.Node, error) {
 	log.Printf("Getting nodes with min_generation: %d", minGeneration)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	r, err := s.client.GetNodes(ctx, &pb.GetNodeRequest{AboveGenerationNumber: minGeneration})
+	r, err := n.client.GetNodes(ctx, &pb.GetNodeRequest{AboveGenerationNumber: minGeneration})
 	if err != nil {
 		return nil, err
 	}
 	return r.Nodes, nil
 }
 
-func (s *Allocator) start() {
+func (n *NodeAgent) start() {
 	uptimeTicker := time.NewTicker(5 * time.Second)
 	for {
 		select {
 		case <-uptimeTicker.C:
-			s.loop()
+			n.loop()
 		}
 	}
 }
 
-func (s *Allocator) loop() {
-	nodes, err := s.getNodes(0)
+// For now node-agent, monitors all the nodes.
+// In prod, we will have one node-agent deployed per node. And will monitor only that node.
+func (n *NodeAgent) loop() {
+	nodes, err := n.getNodes(0)
 	if err != nil {
 		log.Printf("error calling function GetNodes: %v", err)
 	} else {
-		log.Printf("Response from gRPC server's GetNodes total node: %d", len(nodes))
+		log.Printf("Response from gRPC server'n GetNodes total node: %d", len(nodes))
 	}
 
 	log.Printf("Getting all podAlls")
-	podAlls, err := s.getPods(true /* all */, "" /* phase */)
+	podAlls, err := n.getPods(true /* all */, "" /* phase */)
 	if err != nil {
 		log.Fatalf("error calling function GetPods: %v", err)
 	}
-	log.Printf("Response from gRPC server's GetPods total pod: %d", len(podAlls))
+	log.Printf("Response from gRPC server'n GetPods total pod: %d", len(podAlls))
+
+	// Check all the pod that need to run on the node
 
 	schedulablePods := make([]*pb.Pod, 0, len(podAlls))
 	for _, pod := range podAlls {
-		if pod.Status.Phase == pb.PodPhase_PENDING_NODE_ASSIGNMENT ||
-			pod.Status.Condition == pb.PodCondition_REALLOCATION_REQUIRED {
+		if pod.Status.Phase == pb.PodPhase_PENDING_NODE_ASSIGNMENT {
 			schedulablePods = append(schedulablePods, pod)
 		}
 	}
@@ -87,47 +90,36 @@ func (s *Allocator) loop() {
 		return schedulablePods[i].Spec.Priority > schedulablePods[j].Spec.Priority
 	})
 
-	availableResourcesOnNode := make(map[string]*pb.Resource)
-	for _, node := range nodes {
-		availableResourcesOnNode[node.Metadata.Uuid] = availableResources(node, podAlls)
-	}
-
 	schedudedPods := make([]*pb.Pod, 0, len(podAlls))
 	for _, pod := range schedulablePods {
-		log.Printf("Scheduling pod: %s", pod.Metadata.Name)
+		log.Printf("Scheduling pod: %n", pod.Metadata.Name)
 		feasibleNodes := make([]*pb.Node, 0, len(nodes))
 		for _, node := range nodes {
 			// Check if Node meets pod placement requirements
 			if !passNodeSelector(node, pod) {
-				log.Printf("Node: %s does not meet node selector requirements for pod: %s", node.Metadata.Name, pod.Metadata.Name)
+				log.Printf("Node: %n does not meet node selector requirements for pod: %n", node.Metadata.Name, pod.Metadata.Name)
 				continue
 			}
 
 			// Check if Node has enough resources
-			availableResources := availableResourcesOnNode[node.Metadata.Uuid]
-			log.Printf("Node: %s has available resources: %+v", node.Metadata.Name, availableResources)
-			if availableResources.Cpu < pod.Spec.ResourceRequirement.Cpu ||
-				availableResources.Ram < pod.Spec.ResourceRequirement.Ram ||
-				availableResources.Storage < pod.Spec.ResourceRequirement.Storage {
+			avaiableResources := availableResources(node, podAlls)
+			log.Printf("Node: %n has available resources: %+v", node.Metadata.Name, avaiableResources)
+			if avaiableResources.Cpu < pod.Spec.ResourceRequirement.Cpu ||
+				avaiableResources.Ram < pod.Spec.ResourceRequirement.Ram ||
+				avaiableResources.Storage < pod.Spec.ResourceRequirement.Storage {
 				continue
 			}
 			feasibleNodes = append(feasibleNodes, node)
 		}
-		log.Printf("Found %d feasible nodes for pod: %s", len(feasibleNodes), pod.Metadata.Name)
+		log.Printf("Found %d feasible nodes for pod: %n", len(feasibleNodes), pod.Metadata.Name)
 		bestFitNode := findBestFitNode(feasibleNodes)
 		if bestFitNode == nil {
-			log.Printf("No feasible node found for pod: %s", pod.Metadata.Name)
+			log.Printf("No feasible node found for pod: %n", pod.Metadata.Name)
 			continue
 		}
-		log.Printf("Assigning pod: %s to node: %s", pod.Metadata.Name, bestFitNode.Metadata.Name)
-
-		// Update available resources on the node
-		availableResourcesOnNode[bestFitNode.Metadata.Uuid].Cpu -= pod.Spec.ResourceRequirement.Cpu
-		availableResourcesOnNode[bestFitNode.Metadata.Uuid].Ram -= pod.Spec.ResourceRequirement.Ram
-		availableResourcesOnNode[bestFitNode.Metadata.Uuid].Storage -= pod.Spec.ResourceRequirement.Storage
+		log.Printf("Assigning pod: %n to node: %n", pod.Metadata.Name, bestFitNode.Metadata.Name)
 		pod.Status.NodeUuid = bestFitNode.Metadata.Uuid
 		pod.Status.Phase = pb.PodPhase_NODE_ASSIGNED
-		pod.Status.Condition = pb.PodCondition_UNKNOWN
 		for i, v := range podAlls {
 			if v == pod {
 				podAlls[i] = pod
@@ -137,7 +129,7 @@ func (s *Allocator) loop() {
 		schedudedPods = append(schedudedPods, pod)
 	}
 
-	_, err = s.client.UpdatePods(context.Background(), &pb.UpdatePodRequest{Pods: schedudedPods})
+	_, err = n.client.UpdatePods(context.Background(), &pb.UpdatePodRequest{Pods: schedudedPods})
 	if err != nil {
 		log.Printf("error calling function UpdatePods: %v", err)
 	}
@@ -191,7 +183,7 @@ func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	return resources
 }
 
-func (s *Allocator) Run() {
-	log.Printf("Starting allocator")
-	go s.start()
+func (n *NodeAgent) Run() {
+	log.Printf("Starting node agent")
+	go n.start()
 }
