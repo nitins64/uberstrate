@@ -25,6 +25,7 @@ const (
 	StateStoreService_GetNodes_FullMethodName   = "/statestore.StateStoreService/GetNodes"
 	StateStoreService_LoadPods_FullMethodName   = "/statestore.StateStoreService/LoadPods"
 	StateStoreService_GetPods_FullMethodName    = "/statestore.StateStoreService/GetPods"
+	StateStoreService_UpdatePods_FullMethodName = "/statestore.StateStoreService/UpdatePods"
 )
 
 // StateStoreServiceClient is the client API for StateStoreService service.
@@ -37,6 +38,7 @@ type StateStoreServiceClient interface {
 	GetNodes(ctx context.Context, in *GetNodeRequest, opts ...grpc.CallOption) (*GetNodeResponse, error)
 	LoadPods(ctx context.Context, in *LoadPodRequest, opts ...grpc.CallOption) (*LoadPodResponse, error)
 	GetPods(ctx context.Context, in *GetPodRequest, opts ...grpc.CallOption) (*GetPodResponse, error)
+	UpdatePods(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
 }
 
 type stateStoreServiceClient struct {
@@ -107,6 +109,16 @@ func (c *stateStoreServiceClient) GetPods(ctx context.Context, in *GetPodRequest
 	return out, nil
 }
 
+func (c *stateStoreServiceClient) UpdatePods(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdatePodResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_UpdatePods_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StateStoreServiceServer is the server API for StateStoreService service.
 // All implementations must embed UnimplementedStateStoreServiceServer
 // for forward compatibility.
@@ -117,6 +129,7 @@ type StateStoreServiceServer interface {
 	GetNodes(context.Context, *GetNodeRequest) (*GetNodeResponse, error)
 	LoadPods(context.Context, *LoadPodRequest) (*LoadPodResponse, error)
 	GetPods(context.Context, *GetPodRequest) (*GetPodResponse, error)
+	UpdatePods(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
 	mustEmbedUnimplementedStateStoreServiceServer()
 }
 
@@ -144,6 +157,9 @@ func (UnimplementedStateStoreServiceServer) LoadPods(context.Context, *LoadPodRe
 }
 func (UnimplementedStateStoreServiceServer) GetPods(context.Context, *GetPodRequest) (*GetPodResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPods not implemented")
+}
+func (UnimplementedStateStoreServiceServer) UpdatePods(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePods not implemented")
 }
 func (UnimplementedStateStoreServiceServer) mustEmbedUnimplementedStateStoreServiceServer() {}
 func (UnimplementedStateStoreServiceServer) testEmbeddedByValue()                           {}
@@ -274,6 +290,24 @@ func _StateStoreService_GetPods_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StateStoreService_UpdatePods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePodRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StateStoreServiceServer).UpdatePods(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StateStoreService_UpdatePods_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StateStoreServiceServer).UpdatePods(ctx, req.(*UpdatePodRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StateStoreService_ServiceDesc is the grpc.ServiceDesc for StateStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +338,10 @@ var StateStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPods",
 			Handler:    _StateStoreService_GetPods_Handler,
+		},
+		{
+			MethodName: "UpdatePods",
+			Handler:    _StateStoreService_UpdatePods_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

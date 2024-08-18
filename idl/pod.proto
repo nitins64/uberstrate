@@ -53,7 +53,9 @@ message PodSpec {
 
     TopologySpreadConstraint topology_spread_constraint = 4; // The topology spread constraint
 
-    Resource resource_requirement = 5; // The resource requirement
+    map<string,string> node_selector_labels = 5; // The node selector labels
+
+    Resource resource_requirement = 6; // The resource requirement
 }
 
 // Define the PodPhase enum
@@ -74,7 +76,7 @@ enum QOSClass {
 // Define the PodStatus message
 message PodStatus {
     PodPhase phase = 1; // The phase of the pod
-    string node_uid = 2; // The UID of the node where the pod is running
+    string node_uuid = 2; // The UID of the node where the pod is running
     google.protobuf.Timestamp start_time = 3; // The start time of the pod
     QOSClass qos_class = 4; // The QoS class of the pod
 }

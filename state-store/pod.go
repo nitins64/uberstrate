@@ -33,6 +33,7 @@ type Pod struct {
 	Name          string            `yaml:"name"`
 	NodeSelection NodeSelection     `yaml:"nodeSelection"`
 	Resource      Resource          `yaml:"resource"`
+	Priority      int               `yaml:"priority"`
 	Image         string            `yaml:"image"`
 	Labels        map[string]string `yaml:"labels"`
 }
@@ -77,17 +78,6 @@ func (ps *PodStore) loadInternal() error {
 
 func CreateProtoForPod(ps *PodStore, pod Pod) *pb.Pod {
 	// Implementation of CreateProtoForPod
-	labels := map[string]string{
-		"region":    pod.NodeSelection.Region,
-		"zone":      pod.NodeSelection.Zone,
-		"cluster":   pod.NodeSelection.Cluster,
-		"os":        pod.NodeSelection.OS,
-		"disk_type": pod.NodeSelection.DiskType,
-	}
-	for _, l := range pod.Labels {
-		labels[l] = pod.Labels[l]
-	}
-
 	return &pb.Pod{
 		Ot: &pb.ObjectType{
 			Version: "v1",
@@ -100,7 +90,7 @@ func CreateProtoForPod(ps *PodStore, pod Pod) *pb.Pod {
 			// TODO: Implement this function
 			// Not used since POD spec is immutable.
 			GenerationNumber: 0,
-			Labels:           labels,
+			Labels:           pod.Labels,
 		},
 		Spec: &pb.PodSpec{
 			Image: pod.Image,
@@ -108,6 +98,14 @@ func CreateProtoForPod(ps *PodStore, pod Pod) *pb.Pod {
 				Cpu:     int64(pod.Resource.CPU),
 				Ram:     int64(pod.Resource.RAM),
 				Storage: int64(pod.Resource.Storage),
+			},
+			Priority: int64(pod.Priority),
+			NodeSelectorLabels: map[string]string{
+				"region":    pod.NodeSelection.Region,
+				"zone":      pod.NodeSelection.Zone,
+				"cluster":   pod.NodeSelection.Cluster,
+				"os":        pod.NodeSelection.OS,
+				"disk_type": pod.NodeSelection.DiskType,
 			},
 		},
 		Status: &pb.PodStatus{
@@ -181,4 +179,19 @@ func (ps *PodStore) GetPods(in *pb.GetPodRequest) (pods []*pb.Pod) {
 	}
 	log.Printf("Total pods: %d", len(pods))
 	return pods
+}
+
+func (ps *PodStore) UpdatePods(pod []*pb.Pod) error {
+	ps.mutex.Lock()
+	defer ps.mutex.Unlock()
+	for _, pod := range pod {
+		if _, exists := ps.NameToPod[pod.Metadata.Name]; !exists {
+			return &OperationNotAllowedError{
+				Operation: "UpdatePod",
+				Message:   "Pod does not exist"}
+		}
+		ps.NameToPodProto[pod.Metadata.Name] = pod
+		log.Printf("Updated pod %v", pod)
+	}
+	return nil
 }

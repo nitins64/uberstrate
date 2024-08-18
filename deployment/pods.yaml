@@ -9,6 +9,7 @@
     cpu : 1
     ram : 1028
     storage : 100
+  priority : 1
   image : "nginx"
   labels :
     app : "web"
@@ -20,6 +21,7 @@
     cluster : "w-zone-2-cluster-1"
     os : "linux"
     disk_type : "ssd"
+  priority : 10
   resource :
     cpu : 10
     ram : 1028

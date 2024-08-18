@@ -15,6 +15,14 @@ service StateStoreService {
   rpc GetNodes(GetNodeRequest) returns (GetNodeResponse) {}
   rpc LoadPods(LoadPodRequest) returns (LoadPodResponse) {}
   rpc GetPods(GetPodRequest) returns (GetPodResponse) {}
+  rpc UpdatePods(UpdatePodRequest) returns (UpdatePodResponse) {}
+}
+
+message UpdatePodRequest {
+  repeated Pod pods = 1;
+}
+
+message UpdatePodResponse {
 }
 
 message LoadNodeRequest {
