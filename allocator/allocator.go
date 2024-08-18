@@ -163,6 +163,9 @@ func findBestFitNode(nodes []*pb.Node) *pb.Node {
 
 func passNodeSelector(node *pb.Node, pod *pb.Pod) bool {
 	for key, valueToMatch := range pod.Spec.NodeSelectorLabels {
+		if key == "" || valueToMatch == "" {
+			continue
+		}
 		value, exists := node.Metadata.Labels[key]
 		if !exists || value != valueToMatch {
 			log.Printf("Node: %s does not meet pod selector "+
