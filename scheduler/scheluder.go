@@ -179,7 +179,7 @@ func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	return resources
 }
 
-func (ns *Scheduler) Run() {
+func (s *Scheduler) Run() {
 	log.Printf("Starting scheduler")
-	go ns.start()
+	go s.start()
 }
