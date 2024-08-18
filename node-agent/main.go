@@ -21,6 +21,7 @@ func getConnection() (*grpc.ClientConn, error) {
 	return conn, nil
 }
 
+// Define a custom error type
 func getClientWithContext() pb.StateStoreServiceClient {
 	conn, err := getConnection()
 	if err != nil {
