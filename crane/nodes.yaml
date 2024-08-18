@@ -16,15 +16,15 @@
   cpu: 8
   ram: 1028
   storage: 200000
-#- name: "node-3"
-#  region: "us-west-1"
-#  zone: "w-zone-2"
-#  cluster: "w-zone-2-cluster-1"
-#  os: "windows"
-#  disk_type: "ssd"
-#  cpu: 6
-#  ram: 8192
-#  storage: 200000
+- name: "node-3"
+  region: "us-west-1"
+  zone: "w-zone-2"
+  cluster: "w-zone-2-cluster-1"
+  os: "windows"
+  disk_type: "ssd"
+  cpu: 6
+  ram: 8192
+  storage: 200000
 - name: "node-33"
   region: "us-west-1"
   zone: "w-zone-2"
