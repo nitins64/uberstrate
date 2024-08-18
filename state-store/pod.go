@@ -184,6 +184,7 @@ func (ps *PodStore) GetPods(in *pb.GetPodRequest) (pods []*pb.Pod) {
 func (ps *PodStore) UpdatePods(pod []*pb.Pod) error {
 	ps.mutex.Lock()
 	defer ps.mutex.Unlock()
+	// TODO: Need concurrent control here or any place where we are updating state store.
 	for _, pod := range pod {
 		if _, exists := ps.NameToPod[pod.Metadata.Name]; !exists {
 			return &OperationNotAllowedError{

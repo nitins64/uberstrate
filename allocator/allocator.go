@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type Scheduler struct {
+type Allocator struct {
 	client pb.StateStoreServiceClient
 }
 
-func NewScheduler(client pb.StateStoreServiceClient) *Scheduler {
-	return &Scheduler{
+func NewAllocator(client pb.StateStoreServiceClient) *Allocator {
+	return &Allocator{
 		client: client,
 	}
 }
@@ -26,7 +26,7 @@ var podPhaseMap = map[string]pb.PodPhase{
 	"FAILED":                  pb.PodPhase_FAILED,
 }
 
-func (s *Scheduler) getPods(all bool, phase string) ([]*pb.Pod, error) {
+func (s *Allocator) getPods(all bool, phase string) ([]*pb.Pod, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	r, err := s.client.GetPods(ctx, &pb.GetPodRequest{All: all, Phase: podPhaseMap[phase]})
@@ -36,7 +36,7 @@ func (s *Scheduler) getPods(all bool, phase string) ([]*pb.Pod, error) {
 	return r.Pods, nil
 }
 
-func (s *Scheduler) getNodes(minGeneration int64) ([]*pb.Node, error) {
+func (s *Allocator) getNodes(minGeneration int64) ([]*pb.Node, error) {
 	log.Printf("Getting nodes with min_generation: %d", minGeneration)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -47,7 +47,7 @@ func (s *Scheduler) getNodes(minGeneration int64) ([]*pb.Node, error) {
 	return r.Nodes, nil
 }
 
-func (s *Scheduler) start() {
+func (s *Allocator) start() {
 	uptimeTicker := time.NewTicker(5 * time.Second)
 	for {
 		select {
@@ -57,7 +57,7 @@ func (s *Scheduler) start() {
 	}
 }
 
-func (s *Scheduler) loop() {
+func (s *Allocator) loop() {
 	nodes, err := s.getNodes(0)
 	if err != nil {
 		log.Printf("error calling function GetNodes: %v", err)
@@ -139,7 +139,7 @@ func findBestFitNode(nodes []*pb.Node) *pb.Node {
 	for _, node := range nodes {
 		// This can be improved by using a better algorithm.
 		// For now, we are just using the node with the least CPU capacity.
-		// This is not ideal for when multiple scheduler are running since
+		// This is not ideal for when multiple allocator are running since
 		//all of them would pick same node.
 		if node.Status.Capacity.Cpu < bestFitNode.Status.Capacity.Cpu {
 			bestFitNode = node
@@ -179,7 +179,7 @@ func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	return resources
 }
 
-func (s *Scheduler) Run() {
-	log.Printf("Starting scheduler")
+func (s *Allocator) Run() {
+	log.Printf("Starting allocator")
 	go s.start()
 }

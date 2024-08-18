@@ -33,7 +33,7 @@ func getClientWithContext() pb.StateStoreServiceClient {
 
 func main() {
 	c := getClientWithContext()
-	s := NewScheduler(c)
+	s := NewAllocator(c)
 	s.Run()
 	select {}
 }
