@@ -83,6 +83,12 @@ func main() {
 		log.Fatalf("failed to listen on port 50051: %v", err)
 	}
 
+	// Load the nodes and pods
+	nodeStore := GetNodeStore()
+	nodeStore.Load("../crane/nodes.yaml")
+	ps := GetPodStore()
+	ps.Load("../deployment/pods.yaml")
+
 	s := grpc.NewServer()
 	pb.RegisterStateStoreServiceServer(s, &server{})
 	log.Printf("gRPC server listening at %v", lis.Addr())

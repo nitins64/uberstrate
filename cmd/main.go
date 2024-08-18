@@ -65,7 +65,7 @@ func GetPods(all bool, phase string) {
 	if err != nil {
 		log.Fatalf("error calling function GetPods: %v", err)
 	}
-	log.Printf("Response from gRPC server's GetPods total pod: %d", len(r.Pods))
+	log.Printf("Response from gRPC server's GetPods pod: %v", r.Pods)
 }
 
 func GetNodes(minGeneration int64) {
@@ -75,7 +75,7 @@ func GetNodes(minGeneration int64) {
 	if err != nil {
 		log.Fatalf("error calling function GetNodes: %v", err)
 	}
-	log.Printf("Response from gRPC server's GetNodes total node: %d", len(r.Nodes))
+	log.Printf("Response from gRPC server's GetNodes %v", r.Nodes)
 }
 
 func getClientWithContext() (pb.StateStoreServiceClient, context.Context) {

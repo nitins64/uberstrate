@@ -68,7 +68,8 @@ func (s *Allocator) loop() {
 	log.Printf("Getting all podAlls")
 	podAlls, err := s.getPods(true /* all */, "" /* phase */)
 	if err != nil {
-		log.Fatalf("error calling function GetPods: %v", err)
+		log.Printf("error calling function GetPods: %v", err)
+		return
 	}
 	log.Printf("Response from gRPC server's GetPods total pod: %d", len(podAlls))
 
@@ -174,6 +175,14 @@ func passNodeSelector(node *pb.Node, pod *pb.Pod) bool {
 }
 
 func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
+	if node.Spec.Taint != "" {
+		return &pb.Resource{
+			Cpu:     0,
+			Ram:     0,
+			Storage: 0,
+		}
+	}
+
 	resources := &pb.Resource{
 		Cpu:     node.Status.Capacity.Cpu,
 		Ram:     node.Status.Capacity.Ram,
@@ -181,7 +190,7 @@ func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	}
 	// Calculate the available resources on a node
 	for _, pod := range pods {
-		if pod.Status.NodeUuid == node.Metadata.Uuid {
+		if pod.Status.NodeUuid == node.Metadata.Uuid && pod.Status.Phase == pb.PodPhase_RUNNING {
 			// Deduct the resources used by the running pods
 			resources.Cpu -= pod.Spec.ResourceRequirement.Cpu
 			resources.Ram -= pod.Spec.ResourceRequirement.Ram

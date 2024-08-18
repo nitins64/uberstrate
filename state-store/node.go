@@ -22,7 +22,7 @@ type Node struct {
 	CPU      int    `yaml:"cpu"`
 	RAM      int    `yaml:"ram"`
 	Storage  int    `yaml:"storage"`
-	Offline  bool   `yaml:"offline"`
+	Tainted  string `yaml:"tainted"`
 }
 
 type NodeStore struct {
@@ -77,10 +77,6 @@ func (ns *NodeStore) GetNodes(in *pb.GetNodeRequest) (nodes []*pb.Node) {
 }
 
 func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
-	tainted := ""
-	if node.Offline {
-		tainted = "NoSchedule"
-	}
 
 	return &pb.Node{
 		Ot: &pb.ObjectType{
@@ -101,7 +97,7 @@ func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
 			},
 		},
 		Spec: &pb.NodeSpec{
-			Taint: tainted,
+			Taint: node.Tainted,
 		},
 		Status: &pb.NodeStatus{
 			Capacity: &pb.Resource{
@@ -114,12 +110,35 @@ func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
 	}
 }
 
+func findFirst[T any](slice []T, condition func(T) bool) *T {
+	for _, item := range slice {
+		if condition(item) {
+			return &item
+		}
+	}
+	return nil
+}
+
 func (ns *NodeStore) loadInternal() error {
-	nodes, err := ns.loadNodes()
+	nodes, err := ns.loadNodesFromCrane()
 	if err != nil {
 		return err
 	}
 	log.Printf("Reloaded nodes from %s", ns.CranePath)
+	log.Printf("Found total nodes in Crane %d", len(nodes))
+
+	// if the node is not in the new list, delete it
+	for name, _ := range ns.NameToNode {
+		condition := func(node Node) bool {
+			return node.Name == name
+		}
+		if findFirst(nodes, condition) == nil {
+			log.Printf("Deleting node %s", name)
+			delete(ns.NameToNode, name)
+			delete(ns.NameToNodeProto, name)
+		}
+	}
+
 	incGeneration := true
 	for _, node := range nodes {
 		if _, exists := ns.NameToNode[node.Name]; exists {
@@ -172,8 +191,8 @@ func (ns *NodeStore) Load(filePath string) error {
 	return err
 }
 
-// loadNodes reads a YAML file and returns a slice of Node structs
-func (ns *NodeStore) loadNodes() ([]Node, error) {
+// loadNodesFromCrane reads a YAML file and returns a slice of Node structs
+func (ns *NodeStore) loadNodesFromCrane() ([]Node, error) {
 	// Read the YAML file
 	yamlFile, err := os.ReadFile(ns.CranePath)
 	if err != nil {
