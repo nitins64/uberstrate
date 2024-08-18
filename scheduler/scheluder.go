@@ -98,7 +98,7 @@ func (s *Scheduler) loop() {
 			}
 
 			// Check if Node has enough resources
-			avaiableResources := avaiableResources(node, podAlls)
+			avaiableResources := availableResources(node, podAlls)
 			log.Printf("Node: %s has available resources: %+v", node.Metadata.Name, avaiableResources)
 			if avaiableResources.Cpu < pod.Spec.ResourceRequirement.Cpu ||
 				avaiableResources.Ram < pod.Spec.ResourceRequirement.Ram ||
@@ -161,7 +161,7 @@ func passNodeSelector(node *pb.Node, pod *pb.Pod) bool {
 	return true
 }
 
-func avaiableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
+func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	resources := &pb.Resource{
 		Cpu:     node.Status.Capacity.Cpu,
 		Ram:     node.Status.Capacity.Ram,
