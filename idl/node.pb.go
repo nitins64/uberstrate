@@ -27,6 +27,7 @@ type NodeStatus struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// Node that the capacity of the node is inferred by NodeAgent in actual setting.
 	Capacity *Resource `protobuf:"bytes,1,opt,name=capacity,proto3" json:"capacity,omitempty"` // The capacity of the node
 	Phase    string    `protobuf:"bytes,2,opt,name=phase,proto3" json:"phase,omitempty"`       // The phase of the node (pending, running, terminated)
 }
