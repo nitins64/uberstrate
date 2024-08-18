@@ -13,7 +13,7 @@
   cluster: "w-zone-1-cluster-2"
   os: "linux"
   disk_type: "ssd"
-  cpu: 4
+  cpu: 8
   ram: 1028
   storage: 200000
 - name: "node-3"
