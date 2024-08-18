@@ -4,7 +4,7 @@
   cluster: "w-zone-1-cluster-1"
   os: "linux"
   disk_type: "ssd"
-  cpu: 12
+  cpu: 10
   ram: 8192
   storage: 100000
 - name: "node-2"
@@ -15,7 +15,7 @@
   disk_type: "ssd"
   cpu: 4
   ram: 1028
-  storage: 100000
+  storage: 200000
 - name: "node-3"
   region: "us-west-1"
   zone: "w-zone-2"
@@ -24,7 +24,7 @@
   disk_type: "ssd"
   cpu: 6
   ram: 8192
-  storage: 100000
+  storage: 200000
 - name: "node-4"
   region: "us-west-1"
   zone: "w-zone-2"

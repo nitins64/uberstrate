@@ -14,18 +14,37 @@ type server struct {
 	pb.StateStoreServiceServer
 }
 
+// Define a custom error type
+type OperationNotAllowedError struct {
+	Operation string
+	Message   string
+}
+
+func (e *OperationNotAllowedError) Error() string {
+	return fmt.Sprintf("operation not allowed: %s. %s", e.Operation, e.Message)
+}
+
 func (s *server) SayHello(ctx context.Context, in *pb.HelloWorldRequest) (*pb.HelloWorldResponse, error) {
 	return &pb.HelloWorldResponse{Message: fmt.Sprintf("Hello, World to %s! ", in.Name),
 		Model: &pb.Model{Name: "model"}}, nil
 }
 
-func (s *server) ReLoadNodes(ctx context.Context, in *pb.ReLoadNodeRequest) (*pb.ReLoadNodeResponse, error) {
+func (s *server) LoadNodes(ctx context.Context, in *pb.LoadNodeRequest) (*pb.LoadNodeResponse, error) {
 	nodeStore := GetNodeStore()
-	err := nodeStore.ReLoad(in.Path)
+	err := nodeStore.Load(in.Path)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.ReLoadNodeResponse{}, nil
+	return &pb.LoadNodeResponse{}, nil
+}
+
+func (s *server) LoadPods(ctx context.Context, in *pb.LoadPodRequest) (*pb.LoadPodResponse, error) {
+	ps := GetPodStore()
+	err := ps.Load(in.Path)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LoadPodResponse{}, nil
 }
 
 func (s *server) PrintNodes(ctx context.Context, in *pb.PrintNodeRequest) (*pb.PrintNodeResponse, error) {
@@ -35,6 +54,12 @@ func (s *server) PrintNodes(ctx context.Context, in *pb.PrintNodeRequest) (*pb.P
 		return nil, err
 	}
 	return &pb.PrintNodeResponse{}, nil
+}
+
+func (s *server) GetPods(ctx context.Context, in *pb.GetPodRequest) (*pb.GetPodResponse, error) {
+	ps := GetPodStore()
+	pods := ps.GetPods(in)
+	return &pb.GetPodResponse{Pods: pods}, nil
 }
 
 func (s *server) GetNodes(ctx context.Context, in *pb.GetNodeRequest) (*pb.GetNodeResponse, error) {

@@ -19,10 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	StateStoreService_SayHello_FullMethodName    = "/statestore.StateStoreService/SayHello"
-	StateStoreService_ReLoadNodes_FullMethodName = "/statestore.StateStoreService/ReLoadNodes"
-	StateStoreService_PrintNodes_FullMethodName  = "/statestore.StateStoreService/PrintNodes"
-	StateStoreService_GetNodes_FullMethodName    = "/statestore.StateStoreService/GetNodes"
+	StateStoreService_SayHello_FullMethodName   = "/statestore.StateStoreService/SayHello"
+	StateStoreService_LoadNodes_FullMethodName  = "/statestore.StateStoreService/LoadNodes"
+	StateStoreService_PrintNodes_FullMethodName = "/statestore.StateStoreService/PrintNodes"
+	StateStoreService_GetNodes_FullMethodName   = "/statestore.StateStoreService/GetNodes"
+	StateStoreService_LoadPods_FullMethodName   = "/statestore.StateStoreService/LoadPods"
+	StateStoreService_GetPods_FullMethodName    = "/statestore.StateStoreService/GetPods"
 )
 
 // StateStoreServiceClient is the client API for StateStoreService service.
@@ -30,9 +32,11 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StateStoreServiceClient interface {
 	SayHello(ctx context.Context, in *HelloWorldRequest, opts ...grpc.CallOption) (*HelloWorldResponse, error)
-	ReLoadNodes(ctx context.Context, in *ReLoadNodeRequest, opts ...grpc.CallOption) (*ReLoadNodeResponse, error)
+	LoadNodes(ctx context.Context, in *LoadNodeRequest, opts ...grpc.CallOption) (*LoadNodeResponse, error)
 	PrintNodes(ctx context.Context, in *PrintNodeRequest, opts ...grpc.CallOption) (*PrintNodeResponse, error)
 	GetNodes(ctx context.Context, in *GetNodeRequest, opts ...grpc.CallOption) (*GetNodeResponse, error)
+	LoadPods(ctx context.Context, in *LoadPodRequest, opts ...grpc.CallOption) (*LoadPodResponse, error)
+	GetPods(ctx context.Context, in *GetPodRequest, opts ...grpc.CallOption) (*GetPodResponse, error)
 }
 
 type stateStoreServiceClient struct {
@@ -53,10 +57,10 @@ func (c *stateStoreServiceClient) SayHello(ctx context.Context, in *HelloWorldRe
 	return out, nil
 }
 
-func (c *stateStoreServiceClient) ReLoadNodes(ctx context.Context, in *ReLoadNodeRequest, opts ...grpc.CallOption) (*ReLoadNodeResponse, error) {
+func (c *stateStoreServiceClient) LoadNodes(ctx context.Context, in *LoadNodeRequest, opts ...grpc.CallOption) (*LoadNodeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ReLoadNodeResponse)
-	err := c.cc.Invoke(ctx, StateStoreService_ReLoadNodes_FullMethodName, in, out, cOpts...)
+	out := new(LoadNodeResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_LoadNodes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,14 +87,36 @@ func (c *stateStoreServiceClient) GetNodes(ctx context.Context, in *GetNodeReque
 	return out, nil
 }
 
+func (c *stateStoreServiceClient) LoadPods(ctx context.Context, in *LoadPodRequest, opts ...grpc.CallOption) (*LoadPodResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadPodResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_LoadPods_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *stateStoreServiceClient) GetPods(ctx context.Context, in *GetPodRequest, opts ...grpc.CallOption) (*GetPodResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPodResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_GetPods_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StateStoreServiceServer is the server API for StateStoreService service.
 // All implementations must embed UnimplementedStateStoreServiceServer
 // for forward compatibility.
 type StateStoreServiceServer interface {
 	SayHello(context.Context, *HelloWorldRequest) (*HelloWorldResponse, error)
-	ReLoadNodes(context.Context, *ReLoadNodeRequest) (*ReLoadNodeResponse, error)
+	LoadNodes(context.Context, *LoadNodeRequest) (*LoadNodeResponse, error)
 	PrintNodes(context.Context, *PrintNodeRequest) (*PrintNodeResponse, error)
 	GetNodes(context.Context, *GetNodeRequest) (*GetNodeResponse, error)
+	LoadPods(context.Context, *LoadPodRequest) (*LoadPodResponse, error)
+	GetPods(context.Context, *GetPodRequest) (*GetPodResponse, error)
 	mustEmbedUnimplementedStateStoreServiceServer()
 }
 
@@ -104,14 +130,20 @@ type UnimplementedStateStoreServiceServer struct{}
 func (UnimplementedStateStoreServiceServer) SayHello(context.Context, *HelloWorldRequest) (*HelloWorldResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (UnimplementedStateStoreServiceServer) ReLoadNodes(context.Context, *ReLoadNodeRequest) (*ReLoadNodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReLoadNodes not implemented")
+func (UnimplementedStateStoreServiceServer) LoadNodes(context.Context, *LoadNodeRequest) (*LoadNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadNodes not implemented")
 }
 func (UnimplementedStateStoreServiceServer) PrintNodes(context.Context, *PrintNodeRequest) (*PrintNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PrintNodes not implemented")
 }
 func (UnimplementedStateStoreServiceServer) GetNodes(context.Context, *GetNodeRequest) (*GetNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNodes not implemented")
+}
+func (UnimplementedStateStoreServiceServer) LoadPods(context.Context, *LoadPodRequest) (*LoadPodResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadPods not implemented")
+}
+func (UnimplementedStateStoreServiceServer) GetPods(context.Context, *GetPodRequest) (*GetPodResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPods not implemented")
 }
 func (UnimplementedStateStoreServiceServer) mustEmbedUnimplementedStateStoreServiceServer() {}
 func (UnimplementedStateStoreServiceServer) testEmbeddedByValue()                           {}
@@ -152,20 +184,20 @@ func _StateStoreService_SayHello_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StateStoreService_ReLoadNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReLoadNodeRequest)
+func _StateStoreService_LoadNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadNodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StateStoreServiceServer).ReLoadNodes(ctx, in)
+		return srv.(StateStoreServiceServer).LoadNodes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StateStoreService_ReLoadNodes_FullMethodName,
+		FullMethod: StateStoreService_LoadNodes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StateStoreServiceServer).ReLoadNodes(ctx, req.(*ReLoadNodeRequest))
+		return srv.(StateStoreServiceServer).LoadNodes(ctx, req.(*LoadNodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,6 +238,42 @@ func _StateStoreService_GetNodes_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StateStoreService_LoadPods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadPodRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StateStoreServiceServer).LoadPods(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StateStoreService_LoadPods_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StateStoreServiceServer).LoadPods(ctx, req.(*LoadPodRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StateStoreService_GetPods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPodRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StateStoreServiceServer).GetPods(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StateStoreService_GetPods_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StateStoreServiceServer).GetPods(ctx, req.(*GetPodRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StateStoreService_ServiceDesc is the grpc.ServiceDesc for StateStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -218,8 +286,8 @@ var StateStoreService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StateStoreService_SayHello_Handler,
 		},
 		{
-			MethodName: "ReLoadNodes",
-			Handler:    _StateStoreService_ReLoadNodes_Handler,
+			MethodName: "LoadNodes",
+			Handler:    _StateStoreService_LoadNodes_Handler,
 		},
 		{
 			MethodName: "PrintNodes",
@@ -228,6 +296,14 @@ var StateStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetNodes",
 			Handler:    _StateStoreService_GetNodes_Handler,
+		},
+		{
+			MethodName: "LoadPods",
+			Handler:    _StateStoreService_LoadPods_Handler,
+		},
+		{
+			MethodName: "GetPods",
+			Handler:    _StateStoreService_GetPods_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

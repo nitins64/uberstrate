@@ -4,26 +4,46 @@ option go_package = "gitbub.com/uberstrate/idl";
 
 import "model.proto";
 import "node.proto";
+import "pod.proto";
 
 package statestore;
 
 service StateStoreService {
   rpc SayHello(HelloWorldRequest) returns (HelloWorldResponse) {}
-  rpc ReLoadNodes(ReLoadNodeRequest) returns (ReLoadNodeResponse) {}
+  rpc LoadNodes(LoadNodeRequest) returns (LoadNodeResponse) {}
   rpc PrintNodes(PrintNodeRequest) returns (PrintNodeResponse) {}
   rpc GetNodes(GetNodeRequest) returns (GetNodeResponse) {}
+  rpc LoadPods(LoadPodRequest) returns (LoadPodResponse) {}
+  rpc GetPods(GetPodRequest) returns (GetPodResponse) {}
 }
 
-message ReLoadNodeRequest {
+message LoadNodeRequest {
     string path = 1;
 }
 
-message ReLoadNodeResponse {
+message LoadNodeResponse {
 }
 
+message LoadPodRequest {
+  string path = 1;
+}
+
+message LoadPodResponse {
+}
 
 message PrintNodeRequest{}
 message PrintNodeResponse{}
+
+message GetPodRequest {
+  bool all = 1;
+  // all is true, return all pods
+  // all is false, return pods with phase
+  PodPhase phase = 2;
+}
+
+message GetPodResponse {
+  repeated Pod pods = 1;
+}
 
 message GetNodeRequest {
     int64 above_generation_number = 1;

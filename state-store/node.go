@@ -5,6 +5,7 @@ import (
 	"os"
 	"reflect"
 	"sync"
+	"time"
 
 	pb "gitbub.com/uberstrate/idl"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -27,24 +28,25 @@ type Node struct {
 type NodeStore struct {
 	NameToNode      map[string]Node
 	NameToNodeProto map[string]*pb.Node
-
-	Generation int
-	mutex      sync.Mutex
+	CranePath       string
+	Generation      int
+	loaded          bool
+	mutex           sync.Mutex
 }
 
 var (
-	instance *NodeStore
-	once     sync.Once
+	instanceNodeStore *NodeStore
+	onceInitNodeStore sync.Once
 )
 
 func GetNodeStore() *NodeStore {
-	once.Do(func() {
-		instance = &NodeStore{
+	onceInitNodeStore.Do(func() {
+		instanceNodeStore = &NodeStore{
 			NameToNode:      make(map[string]Node),
 			NameToNodeProto: make(map[string]*pb.Node),
 		}
 	})
-	return instance
+	return instanceNodeStore
 }
 
 func (ns *NodeStore) PrintNodes() error {
@@ -112,18 +114,15 @@ func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
 	}
 }
 
-func (ns *NodeStore) ReLoad(filePath string) error {
-	ns.mutex.Lock()
-	defer ns.mutex.Unlock()
-
-	nodes, err := loadNodes(filePath)
+func (ns *NodeStore) loadInternal() error {
+	nodes, err := ns.loadNodes()
 	if err != nil {
 		return err
 	}
-	ns.Generation++
+	log.Printf("Reloaded nodes from %s", ns.CranePath)
+	incGeneration := true
 	for _, node := range nodes {
 		if _, exists := ns.NameToNode[node.Name]; exists {
-			log.Printf("Node %s already exists.", node.Name)
 			if reflect.DeepEqual(ns.NameToNode[node.Name], node) {
 				continue
 			}
@@ -131,15 +130,52 @@ func (ns *NodeStore) ReLoad(filePath string) error {
 		} else {
 			log.Printf("Adding new node %s.", node.Name)
 		}
+		if incGeneration {
+			incGeneration = false
+			ns.Generation++
+		}
 		ns.NameToNode[node.Name] = node
 		ns.NameToNodeProto[node.Name] = CreateProtoForNode(ns, node)
 	}
+	ns.loaded = true
 	return nil
 }
 
-func loadNodes(filePath string) (node []Node, err error) {
+func (ns *NodeStore) scheduleLoad() {
+	uptimeTicker := time.NewTicker(5 * time.Second)
+	for {
+		select {
+		case <-uptimeTicker.C:
+			ns.mutex.Lock()
+			ns.loadInternal()
+			ns.mutex.Unlock()
+		}
+	}
+}
+
+// Load reads a YAML file and updates the NodeStore with the new nodes
+func (ns *NodeStore) Load(filePath string) error {
+	ns.mutex.Lock()
+	defer ns.mutex.Unlock()
+	if ns.loaded {
+		return &OperationNotAllowedError{
+			Operation: "Load",
+			Message:   "Load already done and running in background"}
+	}
+
+	ns.CranePath = filePath
+	err := ns.loadInternal()
+	if err != nil {
+		return err
+	}
+	go ns.scheduleLoad()
+	return err
+}
+
+// loadNodes reads a YAML file and returns a slice of Node structs
+func (ns *NodeStore) loadNodes() ([]Node, error) {
 	// Read the YAML file
-	yamlFile, err := os.ReadFile(filePath)
+	yamlFile, err := os.ReadFile(ns.CranePath)
 	if err != nil {
 		log.Fatalf("Failed to read YAML file: %v", err)
 	}

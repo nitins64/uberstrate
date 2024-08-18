@@ -1,0 +1,30 @@
+- name : "pod-1"
+  nodeSelection :
+    region : "us-west-1"
+    zone : "w-zone-1"
+    cluster : "w-zone-1-cluster-1"
+    os : "linux"
+    disk_type : "ssd"
+  resource :
+    cpu : 1
+    ram : 1028
+    storage : 100
+  image : "nginx"
+  labels :
+    app : "web"
+    tier : "frontend"
+- name : "pod-2"
+  nodeSelection :
+    region : "us-west-1"
+    zone : "w-zone-2"
+    cluster : "w-zone-2-cluster-1"
+    os : "linux"
+    disk_type : "ssd"
+  resource :
+    cpu : 10
+    ram : 1028
+    storage : 100
+  image : "nginx"
+  labels :
+    app : "web"
+    tier : "frontend"

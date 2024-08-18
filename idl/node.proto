@@ -12,6 +12,7 @@ package statestore;
 
 // Define the NodeStatus message
 message NodeStatus {
+    // Node that the capacity of the node is inferred by NodeAgent in actual setting.
     Resource capacity = 1; // The capacity of the node
     string phase = 2; // The phase of the node (pending, running, terminated)
 }

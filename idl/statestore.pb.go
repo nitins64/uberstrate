@@ -20,7 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ReLoadNodeRequest struct {
+type LoadNodeRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -28,8 +28,8 @@ type ReLoadNodeRequest struct {
 	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
 }
 
-func (x *ReLoadNodeRequest) Reset() {
-	*x = ReLoadNodeRequest{}
+func (x *LoadNodeRequest) Reset() {
+	*x = LoadNodeRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_statestore_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -37,13 +37,13 @@ func (x *ReLoadNodeRequest) Reset() {
 	}
 }
 
-func (x *ReLoadNodeRequest) String() string {
+func (x *LoadNodeRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReLoadNodeRequest) ProtoMessage() {}
+func (*LoadNodeRequest) ProtoMessage() {}
 
-func (x *ReLoadNodeRequest) ProtoReflect() protoreflect.Message {
+func (x *LoadNodeRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_statestore_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,26 +55,26 @@ func (x *ReLoadNodeRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReLoadNodeRequest.ProtoReflect.Descriptor instead.
-func (*ReLoadNodeRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoadNodeRequest.ProtoReflect.Descriptor instead.
+func (*LoadNodeRequest) Descriptor() ([]byte, []int) {
 	return file_statestore_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ReLoadNodeRequest) GetPath() string {
+func (x *LoadNodeRequest) GetPath() string {
 	if x != nil {
 		return x.Path
 	}
 	return ""
 }
 
-type ReLoadNodeResponse struct {
+type LoadNodeResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *ReLoadNodeResponse) Reset() {
-	*x = ReLoadNodeResponse{}
+func (x *LoadNodeResponse) Reset() {
+	*x = LoadNodeResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_statestore_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -82,13 +82,13 @@ func (x *ReLoadNodeResponse) Reset() {
 	}
 }
 
-func (x *ReLoadNodeResponse) String() string {
+func (x *LoadNodeResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReLoadNodeResponse) ProtoMessage() {}
+func (*LoadNodeResponse) ProtoMessage() {}
 
-func (x *ReLoadNodeResponse) ProtoReflect() protoreflect.Message {
+func (x *LoadNodeResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_statestore_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -100,9 +100,94 @@ func (x *ReLoadNodeResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReLoadNodeResponse.ProtoReflect.Descriptor instead.
-func (*ReLoadNodeResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoadNodeResponse.ProtoReflect.Descriptor instead.
+func (*LoadNodeResponse) Descriptor() ([]byte, []int) {
 	return file_statestore_proto_rawDescGZIP(), []int{1}
+}
+
+type LoadPodRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+}
+
+func (x *LoadPodRequest) Reset() {
+	*x = LoadPodRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_statestore_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoadPodRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadPodRequest) ProtoMessage() {}
+
+func (x *LoadPodRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_statestore_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadPodRequest.ProtoReflect.Descriptor instead.
+func (*LoadPodRequest) Descriptor() ([]byte, []int) {
+	return file_statestore_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *LoadPodRequest) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+type LoadPodResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *LoadPodResponse) Reset() {
+	*x = LoadPodResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_statestore_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoadPodResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadPodResponse) ProtoMessage() {}
+
+func (x *LoadPodResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_statestore_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadPodResponse.ProtoReflect.Descriptor instead.
+func (*LoadPodResponse) Descriptor() ([]byte, []int) {
+	return file_statestore_proto_rawDescGZIP(), []int{3}
 }
 
 type PrintNodeRequest struct {
@@ -114,7 +199,7 @@ type PrintNodeRequest struct {
 func (x *PrintNodeRequest) Reset() {
 	*x = PrintNodeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[2]
+		mi := &file_statestore_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -127,7 +212,7 @@ func (x *PrintNodeRequest) String() string {
 func (*PrintNodeRequest) ProtoMessage() {}
 
 func (x *PrintNodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[2]
+	mi := &file_statestore_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -140,7 +225,7 @@ func (x *PrintNodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrintNodeRequest.ProtoReflect.Descriptor instead.
 func (*PrintNodeRequest) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{2}
+	return file_statestore_proto_rawDescGZIP(), []int{4}
 }
 
 type PrintNodeResponse struct {
@@ -152,7 +237,7 @@ type PrintNodeResponse struct {
 func (x *PrintNodeResponse) Reset() {
 	*x = PrintNodeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[3]
+		mi := &file_statestore_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -165,7 +250,7 @@ func (x *PrintNodeResponse) String() string {
 func (*PrintNodeResponse) ProtoMessage() {}
 
 func (x *PrintNodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[3]
+	mi := &file_statestore_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +263,111 @@ func (x *PrintNodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrintNodeResponse.ProtoReflect.Descriptor instead.
 func (*PrintNodeResponse) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{3}
+	return file_statestore_proto_rawDescGZIP(), []int{5}
+}
+
+type GetPodRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	All bool `protobuf:"varint,1,opt,name=all,proto3" json:"all,omitempty"`
+	// all is true, return all pods
+	// all is false, return pods with phase
+	Phase PodPhase `protobuf:"varint,2,opt,name=phase,proto3,enum=statestore.PodPhase" json:"phase,omitempty"`
+}
+
+func (x *GetPodRequest) Reset() {
+	*x = GetPodRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_statestore_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPodRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPodRequest) ProtoMessage() {}
+
+func (x *GetPodRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_statestore_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPodRequest.ProtoReflect.Descriptor instead.
+func (*GetPodRequest) Descriptor() ([]byte, []int) {
+	return file_statestore_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetPodRequest) GetAll() bool {
+	if x != nil {
+		return x.All
+	}
+	return false
+}
+
+func (x *GetPodRequest) GetPhase() PodPhase {
+	if x != nil {
+		return x.Phase
+	}
+	return PodPhase_PENDING_NODE_ASSIGNMENT
+}
+
+type GetPodResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Pods []*Pod `protobuf:"bytes,1,rep,name=pods,proto3" json:"pods,omitempty"`
+}
+
+func (x *GetPodResponse) Reset() {
+	*x = GetPodResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_statestore_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetPodResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPodResponse) ProtoMessage() {}
+
+func (x *GetPodResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_statestore_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPodResponse.ProtoReflect.Descriptor instead.
+func (*GetPodResponse) Descriptor() ([]byte, []int) {
+	return file_statestore_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetPodResponse) GetPods() []*Pod {
+	if x != nil {
+		return x.Pods
+	}
+	return nil
 }
 
 type GetNodeRequest struct {
@@ -192,7 +381,7 @@ type GetNodeRequest struct {
 func (x *GetNodeRequest) Reset() {
 	*x = GetNodeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[4]
+		mi := &file_statestore_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -205,7 +394,7 @@ func (x *GetNodeRequest) String() string {
 func (*GetNodeRequest) ProtoMessage() {}
 
 func (x *GetNodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[4]
+	mi := &file_statestore_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -218,7 +407,7 @@ func (x *GetNodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNodeRequest.ProtoReflect.Descriptor instead.
 func (*GetNodeRequest) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{4}
+	return file_statestore_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetNodeRequest) GetAboveGenerationNumber() int64 {
@@ -239,7 +428,7 @@ type GetNodeResponse struct {
 func (x *GetNodeResponse) Reset() {
 	*x = GetNodeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[5]
+		mi := &file_statestore_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -252,7 +441,7 @@ func (x *GetNodeResponse) String() string {
 func (*GetNodeResponse) ProtoMessage() {}
 
 func (x *GetNodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[5]
+	mi := &file_statestore_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -265,7 +454,7 @@ func (x *GetNodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetNodeResponse.ProtoReflect.Descriptor instead.
 func (*GetNodeResponse) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{5}
+	return file_statestore_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetNodeResponse) GetNodes() []*Node {
@@ -286,7 +475,7 @@ type HelloWorldRequest struct {
 func (x *HelloWorldRequest) Reset() {
 	*x = HelloWorldRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[6]
+		mi := &file_statestore_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -299,7 +488,7 @@ func (x *HelloWorldRequest) String() string {
 func (*HelloWorldRequest) ProtoMessage() {}
 
 func (x *HelloWorldRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[6]
+	mi := &file_statestore_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -312,7 +501,7 @@ func (x *HelloWorldRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloWorldRequest.ProtoReflect.Descriptor instead.
 func (*HelloWorldRequest) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{6}
+	return file_statestore_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *HelloWorldRequest) GetName() string {
@@ -334,7 +523,7 @@ type HelloWorldResponse struct {
 func (x *HelloWorldResponse) Reset() {
 	*x = HelloWorldResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_statestore_proto_msgTypes[7]
+		mi := &file_statestore_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -347,7 +536,7 @@ func (x *HelloWorldResponse) String() string {
 func (*HelloWorldResponse) ProtoMessage() {}
 
 func (x *HelloWorldResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_statestore_proto_msgTypes[7]
+	mi := &file_statestore_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -360,7 +549,7 @@ func (x *HelloWorldResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloWorldResponse.ProtoReflect.Descriptor instead.
 func (*HelloWorldResponse) Descriptor() ([]byte, []int) {
-	return file_statestore_proto_rawDescGZIP(), []int{7}
+	return file_statestore_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *HelloWorldResponse) GetMessage() string {
@@ -383,40 +572,52 @@ var file_statestore_proto_rawDesc = []byte{
 	0x0a, 0x10, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x12, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x1a, 0x0b,
 	0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x0a, 0x6e, 0x6f, 0x64,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x27, 0x0a, 0x11, 0x52, 0x65, 0x4c, 0x6f, 0x61,
-	0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
-	0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68,
-	0x22, 0x14, 0x0a, 0x12, 0x52, 0x65, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x09, 0x70, 0x6f, 0x64, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x22, 0x25, 0x0a, 0x0f, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x22, 0x12, 0x0a, 0x10, 0x4c, 0x6f, 0x61,
+	0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x0a,
+	0x0e, 0x4c, 0x6f, 0x61, 0x64, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70,
+	0x61, 0x74, 0x68, 0x22, 0x11, 0x0a, 0x0f, 0x4c, 0x6f, 0x61, 0x64, 0x50, 0x6f, 0x64, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x12, 0x0a, 0x10, 0x50, 0x72, 0x69, 0x6e, 0x74, 0x4e,
 	0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x13, 0x0a, 0x11, 0x50, 0x72,
 	0x69, 0x6e, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x48, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x36, 0x0a, 0x17, 0x61, 0x62, 0x6f, 0x76, 0x65, 0x5f, 0x67, 0x65, 0x6e, 0x65, 0x72,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x03, 0x52, 0x15, 0x61, 0x62, 0x6f, 0x76, 0x65, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0x39, 0x0a, 0x0f, 0x47, 0x65, 0x74,
-	0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x05,
-	0x6e, 0x6f, 0x64, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x73, 0x74,
-	0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x05, 0x6e,
-	0x6f, 0x64, 0x65, 0x73, 0x22, 0x27, 0x0a, 0x11, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72,
-	0x6c, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x57, 0x0a,
-	0x12, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x27, 0x0a,
-	0x05, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x73,
-	0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52,
-	0x05, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x32, 0xc4, 0x02, 0x0a, 0x11, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x53, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x08,
-	0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x1d, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65,
-	0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72, 0x6c, 0x64,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73,
-	0x74, 0x6f, 0x72, 0x65, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b, 0x52, 0x65, 0x4c,
-	0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x73, 0x12, 0x1d, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65,
-	0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73,
-	0x74, 0x6f, 0x72, 0x65, 0x2e, 0x52, 0x65, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52,
+	0x4d, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x10, 0x0a, 0x03, 0x61, 0x6c, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x03, 0x61,
+	0x6c, 0x6c, 0x12, 0x2a, 0x0a, 0x05, 0x70, 0x68, 0x61, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0e, 0x32, 0x14, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x50,
+	0x6f, 0x64, 0x50, 0x68, 0x61, 0x73, 0x65, 0x52, 0x05, 0x70, 0x68, 0x61, 0x73, 0x65, 0x22, 0x35,
+	0x0a, 0x0e, 0x47, 0x65, 0x74, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x23, 0x0a, 0x04, 0x70, 0x6f, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f,
+	0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x6f, 0x64, 0x52,
+	0x04, 0x70, 0x6f, 0x64, 0x73, 0x22, 0x48, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x36, 0x0a, 0x17, 0x61, 0x62, 0x6f, 0x76, 0x65,
+	0x5f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6e, 0x75, 0x6d, 0x62,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x15, 0x61, 0x62, 0x6f, 0x76, 0x65, 0x47,
+	0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22,
+	0x39, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x26, 0x0a, 0x05, 0x6e, 0x6f, 0x64, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x10, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4e,
+	0x6f, 0x64, 0x65, 0x52, 0x05, 0x6e, 0x6f, 0x64, 0x65, 0x73, 0x22, 0x27, 0x0a, 0x11, 0x48, 0x65,
+	0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x22, 0x57, 0x0a, 0x12, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x57, 0x6f, 0x72, 0x6c,
+	0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x12, 0x27, 0x0a, 0x05, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x11, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e,
+	0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x05, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x32, 0xc9, 0x03, 0x0a,
+	0x11, 0x53, 0x74, 0x61, 0x74, 0x65, 0x53, 0x74, 0x6f, 0x72, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x4b, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x1d,
+	0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x48, 0x65, 0x6c, 0x6c,
+	0x6f, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e,
+	0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f,
+	0x57, 0x6f, 0x72, 0x6c, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x48, 0x0a, 0x09, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x73, 0x12, 0x1b, 0x2e, 0x73,
+	0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f,
+	0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x73, 0x74, 0x61, 0x74,
+	0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x4e, 0x6f, 0x64, 0x65, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0a, 0x50, 0x72, 0x69,
 	0x6e, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x73, 0x12, 0x1c, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73,
 	0x74, 0x6f, 0x72, 0x65, 0x2e, 0x50, 0x72, 0x69, 0x6e, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
@@ -426,10 +627,18 @@ var file_statestore_proto_rawDesc = []byte{
 	0x65, 0x73, 0x12, 0x1a, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e,
 	0x47, 0x65, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
 	0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x4e,
-	0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x1b, 0x5a,
-	0x19, 0x67, 0x69, 0x74, 0x62, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x75, 0x62, 0x65, 0x72,
-	0x73, 0x74, 0x72, 0x61, 0x74, 0x65, 0x2f, 0x69, 0x64, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a,
+	0x08, 0x4c, 0x6f, 0x61, 0x64, 0x50, 0x6f, 0x64, 0x73, 0x12, 0x1a, 0x2e, 0x73, 0x74, 0x61, 0x74,
+	0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x50, 0x6f, 0x64, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f,
+	0x72, 0x65, 0x2e, 0x4c, 0x6f, 0x61, 0x64, 0x50, 0x6f, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x42, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x50, 0x6f, 0x64, 0x73, 0x12,
+	0x19, 0x2e, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74,
+	0x50, 0x6f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x73, 0x74, 0x61,
+	0x74, 0x65, 0x73, 0x74, 0x6f, 0x72, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x6f, 0x64, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x1b, 0x5a, 0x19, 0x67, 0x69, 0x74, 0x62,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x75, 0x62, 0x65, 0x72, 0x73, 0x74, 0x72, 0x61, 0x74,
+	0x65, 0x2f, 0x69, 0x64, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -444,35 +653,47 @@ func file_statestore_proto_rawDescGZIP() []byte {
 	return file_statestore_proto_rawDescData
 }
 
-var file_statestore_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_statestore_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_statestore_proto_goTypes = []any{
-	(*ReLoadNodeRequest)(nil),  // 0: statestore.ReLoadNodeRequest
-	(*ReLoadNodeResponse)(nil), // 1: statestore.ReLoadNodeResponse
-	(*PrintNodeRequest)(nil),   // 2: statestore.PrintNodeRequest
-	(*PrintNodeResponse)(nil),  // 3: statestore.PrintNodeResponse
-	(*GetNodeRequest)(nil),     // 4: statestore.GetNodeRequest
-	(*GetNodeResponse)(nil),    // 5: statestore.GetNodeResponse
-	(*HelloWorldRequest)(nil),  // 6: statestore.HelloWorldRequest
-	(*HelloWorldResponse)(nil), // 7: statestore.HelloWorldResponse
-	(*Node)(nil),               // 8: statestore.Node
-	(*Model)(nil),              // 9: statestore.Model
+	(*LoadNodeRequest)(nil),    // 0: statestore.LoadNodeRequest
+	(*LoadNodeResponse)(nil),   // 1: statestore.LoadNodeResponse
+	(*LoadPodRequest)(nil),     // 2: statestore.LoadPodRequest
+	(*LoadPodResponse)(nil),    // 3: statestore.LoadPodResponse
+	(*PrintNodeRequest)(nil),   // 4: statestore.PrintNodeRequest
+	(*PrintNodeResponse)(nil),  // 5: statestore.PrintNodeResponse
+	(*GetPodRequest)(nil),      // 6: statestore.GetPodRequest
+	(*GetPodResponse)(nil),     // 7: statestore.GetPodResponse
+	(*GetNodeRequest)(nil),     // 8: statestore.GetNodeRequest
+	(*GetNodeResponse)(nil),    // 9: statestore.GetNodeResponse
+	(*HelloWorldRequest)(nil),  // 10: statestore.HelloWorldRequest
+	(*HelloWorldResponse)(nil), // 11: statestore.HelloWorldResponse
+	(PodPhase)(0),              // 12: statestore.PodPhase
+	(*Pod)(nil),                // 13: statestore.Pod
+	(*Node)(nil),               // 14: statestore.Node
+	(*Model)(nil),              // 15: statestore.Model
 }
 var file_statestore_proto_depIdxs = []int32{
-	8, // 0: statestore.GetNodeResponse.nodes:type_name -> statestore.Node
-	9, // 1: statestore.HelloWorldResponse.model:type_name -> statestore.Model
-	6, // 2: statestore.StateStoreService.SayHello:input_type -> statestore.HelloWorldRequest
-	0, // 3: statestore.StateStoreService.ReLoadNodes:input_type -> statestore.ReLoadNodeRequest
-	2, // 4: statestore.StateStoreService.PrintNodes:input_type -> statestore.PrintNodeRequest
-	4, // 5: statestore.StateStoreService.GetNodes:input_type -> statestore.GetNodeRequest
-	7, // 6: statestore.StateStoreService.SayHello:output_type -> statestore.HelloWorldResponse
-	1, // 7: statestore.StateStoreService.ReLoadNodes:output_type -> statestore.ReLoadNodeResponse
-	3, // 8: statestore.StateStoreService.PrintNodes:output_type -> statestore.PrintNodeResponse
-	5, // 9: statestore.StateStoreService.GetNodes:output_type -> statestore.GetNodeResponse
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	12, // 0: statestore.GetPodRequest.phase:type_name -> statestore.PodPhase
+	13, // 1: statestore.GetPodResponse.pods:type_name -> statestore.Pod
+	14, // 2: statestore.GetNodeResponse.nodes:type_name -> statestore.Node
+	15, // 3: statestore.HelloWorldResponse.model:type_name -> statestore.Model
+	10, // 4: statestore.StateStoreService.SayHello:input_type -> statestore.HelloWorldRequest
+	0,  // 5: statestore.StateStoreService.LoadNodes:input_type -> statestore.LoadNodeRequest
+	4,  // 6: statestore.StateStoreService.PrintNodes:input_type -> statestore.PrintNodeRequest
+	8,  // 7: statestore.StateStoreService.GetNodes:input_type -> statestore.GetNodeRequest
+	2,  // 8: statestore.StateStoreService.LoadPods:input_type -> statestore.LoadPodRequest
+	6,  // 9: statestore.StateStoreService.GetPods:input_type -> statestore.GetPodRequest
+	11, // 10: statestore.StateStoreService.SayHello:output_type -> statestore.HelloWorldResponse
+	1,  // 11: statestore.StateStoreService.LoadNodes:output_type -> statestore.LoadNodeResponse
+	5,  // 12: statestore.StateStoreService.PrintNodes:output_type -> statestore.PrintNodeResponse
+	9,  // 13: statestore.StateStoreService.GetNodes:output_type -> statestore.GetNodeResponse
+	3,  // 14: statestore.StateStoreService.LoadPods:output_type -> statestore.LoadPodResponse
+	7,  // 15: statestore.StateStoreService.GetPods:output_type -> statestore.GetPodResponse
+	10, // [10:16] is the sub-list for method output_type
+	4,  // [4:10] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_statestore_proto_init() }
@@ -482,9 +703,10 @@ func file_statestore_proto_init() {
 	}
 	file_model_proto_init()
 	file_node_proto_init()
+	file_pod_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_statestore_proto_msgTypes[0].Exporter = func(v any, i int) any {
-			switch v := v.(*ReLoadNodeRequest); i {
+			switch v := v.(*LoadNodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -496,7 +718,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[1].Exporter = func(v any, i int) any {
-			switch v := v.(*ReLoadNodeResponse); i {
+			switch v := v.(*LoadNodeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -508,7 +730,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*PrintNodeRequest); i {
+			switch v := v.(*LoadPodRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -520,7 +742,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[3].Exporter = func(v any, i int) any {
-			switch v := v.(*PrintNodeResponse); i {
+			switch v := v.(*LoadPodResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -532,7 +754,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[4].Exporter = func(v any, i int) any {
-			switch v := v.(*GetNodeRequest); i {
+			switch v := v.(*PrintNodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -544,7 +766,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[5].Exporter = func(v any, i int) any {
-			switch v := v.(*GetNodeResponse); i {
+			switch v := v.(*PrintNodeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -556,7 +778,7 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[6].Exporter = func(v any, i int) any {
-			switch v := v.(*HelloWorldRequest); i {
+			switch v := v.(*GetPodRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -568,6 +790,54 @@ func file_statestore_proto_init() {
 			}
 		}
 		file_statestore_proto_msgTypes[7].Exporter = func(v any, i int) any {
+			switch v := v.(*GetPodResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_statestore_proto_msgTypes[8].Exporter = func(v any, i int) any {
+			switch v := v.(*GetNodeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_statestore_proto_msgTypes[9].Exporter = func(v any, i int) any {
+			switch v := v.(*GetNodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_statestore_proto_msgTypes[10].Exporter = func(v any, i int) any {
+			switch v := v.(*HelloWorldRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_statestore_proto_msgTypes[11].Exporter = func(v any, i int) any {
 			switch v := v.(*HelloWorldResponse); i {
 			case 0:
 				return &v.state
@@ -586,7 +856,7 @@ func file_statestore_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_statestore_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
