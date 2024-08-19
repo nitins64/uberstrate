@@ -1,5 +1,8 @@
 TODO
 - Deployment 
+- Split NodeAgent into Nodecontroller and NodeAgent
+  - NodeController - responsible for garbage collection of pods, collect health metrics
+  - NodeAgent - responsible for pod lifecycle management
 - Various deployment strategies
 - Disruption budget
 - Delta updates

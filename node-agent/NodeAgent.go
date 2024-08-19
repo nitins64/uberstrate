@@ -157,6 +157,9 @@ func (n *NodeAgent) loop() {
 	// Now check if Node is deleted from the state store and change the status of the pod to FAILED
 	//and condition to REALLOCATION_REQUIRED
 	for _, pod := range podAlls {
+		if pod.Status.NodeUuid == "" {
+			continue
+		}
 		condition := func(node *pb.Node) bool {
 			return pod.Status.NodeUuid == node.Metadata.Uuid
 		}
