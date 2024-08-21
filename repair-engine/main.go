@@ -34,7 +34,7 @@ func getClientWithContext() pb.StateStoreServiceClient {
 
 func main() {
 	c := getClientWithContext()
-	s := NewNodeAgent(c)
+	s := NewRepairEngine(c)
 	s.Run()
 	select {}
 }

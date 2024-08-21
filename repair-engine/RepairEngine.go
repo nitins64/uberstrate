@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-type NodeAgent struct {
+type RepairEngine struct {
 	client pb.StateStoreServiceClient
 }
 
-func NewNodeAgent(client pb.StateStoreServiceClient) *NodeAgent {
-	return &NodeAgent{
+func NewRepairEngine(client pb.StateStoreServiceClient) *RepairEngine {
+	return &RepairEngine{
 		client: client,
 	}
 }
@@ -25,7 +25,7 @@ var podPhaseMap = map[string]pb.PodPhase{
 	"FAILED":                  pb.PodPhase_FAILED,
 }
 
-func (n *NodeAgent) getPods(all bool, phase string) ([]*pb.Pod, error) {
+func (n *RepairEngine) getPods(all bool, phase string) ([]*pb.Pod, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	r, err := n.client.GetPods(ctx, &pb.GetPodRequest{All: all, Phase: podPhaseMap[phase]})
@@ -35,7 +35,7 @@ func (n *NodeAgent) getPods(all bool, phase string) ([]*pb.Pod, error) {
 	return r.Pods, nil
 }
 
-func (n *NodeAgent) getNodes(minGeneration int64) ([]*pb.Node, error) {
+func (n *RepairEngine) getNodes(minGeneration int64) ([]*pb.Node, error) {
 	log.Printf("Getting nodes with min_generation: %d", minGeneration)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -46,7 +46,7 @@ func (n *NodeAgent) getNodes(minGeneration int64) ([]*pb.Node, error) {
 	return r.Nodes, nil
 }
 
-func (n *NodeAgent) start() {
+func (n *RepairEngine) start() {
 	uptimeTicker := time.NewTicker(5 * time.Second)
 	for {
 		select {
@@ -65,9 +65,9 @@ func findFirst[T any](slice []T, condition func(T) bool) *T {
 	return nil
 }
 
-// For now node-agent, monitors all the nodes.
-// In prod, we will have one node-agent deployed per node. And will monitor only that node.
-func (n *NodeAgent) loop() {
+// For now repair-engine, monitors all the nodes.
+// In prod, we will have one repair-engine deployed per node. And will monitor only that node.
+func (n *RepairEngine) loop() {
 	nodes, err := n.getNodes(0)
 	if err != nil {
 		log.Printf("error calling function GetNodes: %v", err)
@@ -201,7 +201,7 @@ func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
 	return resources
 }
 
-func (n *NodeAgent) Run() {
-	log.Printf("Starting node agent")
+func (n *RepairEngine) Run() {
+	log.Printf("Starting repair engine")
 	go n.start()
 }
