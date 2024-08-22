@@ -63,8 +63,8 @@ func (ns *NodeStore) PrintNodes() error {
 func (ns *NodeStore) GetNodes(in *pb.GetNodeRequest) (nodes []*pb.Node) {
 	ns.mutex.Lock()
 	defer ns.mutex.Unlock()
-	log.Printf("Get nodes with AboveGenerationNumber: %d", in.AboveGenerationNumber)
-	log.Printf("Number of nodes: %d", len(ns.NameToNodeProto))
+	//log.Printf("Get nodes with AboveGenerationNumber: %d", in.AboveGenerationNumber)
+	//log.Printf("Number of nodes: %d", len(ns.NameToNodeProto))
 
 	nodes = make([]*pb.Node, 0, len(ns.NameToNodeProto))
 	for _, node := range ns.NameToNodeProto {
@@ -72,7 +72,7 @@ func (ns *NodeStore) GetNodes(in *pb.GetNodeRequest) (nodes []*pb.Node) {
 			nodes = append(nodes, node)
 		}
 	}
-	log.Printf("Total nodes: %d", len(nodes))
+	//log.Printf("Total nodes: %d", len(nodes))
 	return nodes
 }
 
@@ -124,8 +124,11 @@ func (ns *NodeStore) loadInternal() error {
 	if err != nil {
 		return err
 	}
-	log.Printf("Reloaded nodes from %s", ns.CranePath)
-	log.Printf("Found total nodes in Crane %d", len(nodes))
+
+	//log.Printf("Load nodes from crane")
+
+	// log.Printf("Reloaded nodes from %s", ns.CranePath)
+	// log.Printf("Found total nodes in Crane %d", len(nodes))
 
 	// if the node is not in the new list, delete it
 	for name, _ := range ns.NameToNode {

@@ -37,7 +37,7 @@ func (s *Allocator) getPods(all bool, phase string) ([]*pb.Pod, error) {
 }
 
 func (s *Allocator) getNodes(minGeneration int64) ([]*pb.Node, error) {
-	log.Printf("Getting nodes with min_generation: %d", minGeneration)
+	//log.Printf("Getting nodes with min_generation: %d", minGeneration)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	r, err := s.client.GetNodes(ctx, &pb.GetNodeRequest{AboveGenerationNumber: minGeneration})
@@ -62,16 +62,16 @@ func (s *Allocator) loop() {
 	if err != nil {
 		log.Printf("error calling function GetNodes: %v", err)
 	} else {
-		log.Printf("Response from gRPC server's GetNodes total node: %d", len(nodes))
+		//log.Printf("Response from gRPC server's GetNodes total node: %d", len(nodes))
 	}
 
-	log.Printf("Getting all podAlls")
+	log.Printf("Running reconcilliation loop")
 	podAlls, err := s.getPods(true /* all */, "" /* phase */)
 	if err != nil {
 		log.Printf("error calling function GetPods: %v", err)
 		return
 	}
-	log.Printf("Response from gRPC server's GetPods total pod: %d", len(podAlls))
+	//log.Printf("Response from gRPC server's GetPods total pod: %d", len(podAlls))
 
 	schedulablePods := make([]*pb.Pod, 0, len(podAlls))
 	for _, pod := range podAlls {
@@ -81,7 +81,12 @@ func (s *Allocator) loop() {
 		}
 	}
 
-	log.Printf("Scheduling %d podAlls", len(schedulablePods))
+	if len(schedulablePods) > 0 {
+		log.Printf("Needs scheduling for %d pods.", len(schedulablePods))
+		for _, pod := range schedulablePods {
+			log.Printf("	Pod name: %s", pod.Metadata.Name)
+		}
+	}
 
 	// Sort schedulablePods by priority in descending order
 	sort.Slice(schedulablePods, func(i, j int) bool {
@@ -100,13 +105,13 @@ func (s *Allocator) loop() {
 		for _, node := range nodes {
 			// Check if Node meets pod placement requirements
 			if !passNodeSelector(node, pod) {
-				log.Printf("Node: %s does not meet node selector requirements for pod: %s", node.Metadata.Name, pod.Metadata.Name)
+				//log.Printf("Node: %s does not meet node selector requirements for pod: %s", node.Metadata.Name, pod.Metadata.Name)
 				continue
 			}
 
 			// Check if Node has enough resources
 			availableResources := availableResourcesOnNode[node.Metadata.Uuid]
-			log.Printf("Node: %s has available resources: %+v", node.Metadata.Name, availableResources)
+			//log.Printf("Node: %s has available resources: %+v", node.Metadata.Name, availableResources)
 			if availableResources.Cpu < pod.Spec.ResourceRequirement.Cpu ||
 				availableResources.Ram < pod.Spec.ResourceRequirement.Ram ||
 				availableResources.Storage < pod.Spec.ResourceRequirement.Storage {
@@ -114,7 +119,7 @@ func (s *Allocator) loop() {
 			}
 			feasibleNodes = append(feasibleNodes, node)
 		}
-		log.Printf("Found %d feasible nodes for pod: %s", len(feasibleNodes), pod.Metadata.Name)
+		//log.Printf("Found %d feasible nodes for pod: %s", len(feasibleNodes), pod.Metadata.Name)
 		bestFitNode := findBestFitNode(feasibleNodes)
 		if bestFitNode == nil {
 			log.Printf("No feasible node found for pod: %s", pod.Metadata.Name)
@@ -168,9 +173,9 @@ func passNodeSelector(node *pb.Node, pod *pb.Pod) bool {
 		}
 		value, exists := node.Metadata.Labels[key]
 		if !exists || value != valueToMatch {
-			log.Printf("Node: %s does not meet pod selector "+
-				"requirements for pod: %s. Didn't find key: %s value: %s",
-				node.Metadata.Name, pod.Metadata.Name, key, valueToMatch)
+			//log.Printf("Node: %s does not meet pod selector "+
+			//	"requirements for pod: %s. Didn't find key: %s value: %s",
+			//	node.Metadata.Name, pod.Metadata.Name, key, valueToMatch)
 			return false
 		}
 	}

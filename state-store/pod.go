@@ -57,7 +57,7 @@ func (ps *PodStore) loadInternal() error {
 	if err != nil {
 		return err
 	}
-	log.Printf("Reloaded pods from %s", ps.DeploymentPodPath)
+	//log.Printf("Reloaded pods from %s", ps.DeploymentPodPath)
 	for _, pod := range pods {
 		if _, exists := ps.NameToPod[pod.Name]; exists {
 			if reflect.DeepEqual(ps.NameToPod[pod.Name], pod) {
@@ -169,7 +169,7 @@ func (ps *PodStore) loadPods() ([]Pod, error) {
 func (ps *PodStore) GetPods(in *pb.GetPodRequest) (pods []*pb.Pod) {
 	ps.mutex.Lock()
 	defer ps.mutex.Unlock()
-	log.Printf("Number of pods: %d", len(ps.NameToPodProto))
+	//log.Printf("Number of pods: %d", len(ps.NameToPodProto))
 
 	pods = make([]*pb.Pod, 0, len(ps.NameToPodProto))
 	for _, pod := range ps.NameToPodProto {
@@ -177,7 +177,7 @@ func (ps *PodStore) GetPods(in *pb.GetPodRequest) (pods []*pb.Pod) {
 			pods = append(pods, pod)
 		}
 	}
-	log.Printf("Total pods: %d", len(pods))
+	//log.Printf("Total pods: %d", len(pods))
 	return pods
 }
 
@@ -192,7 +192,8 @@ func (ps *PodStore) UpdatePods(pod []*pb.Pod) error {
 				Message:   "Pod does not exist"}
 		}
 		ps.NameToPodProto[pod.Metadata.Name] = pod
-		log.Printf("Updated pod %v", pod)
+		log.Printf("Updated pod name:%s status:%s condition:%s", pod.Metadata.Name,
+			pod.Status.Phase, pod.Status.Condition)
 	}
 	return nil
 }
