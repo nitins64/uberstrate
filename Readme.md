@@ -1,4 +1,5 @@
-TODO
+TODO for prototype
+- Watchdog
 - Deployment 
 - Split NodeAgent into Nodecontroller and NodeAgent
   - NodeController - responsible for garbage collection of pods, collect health metrics
@@ -8,9 +9,7 @@ TODO
 - Delta updates
 - Concurrent updates
 - StatefulSet - stable pod name
-- DaemonSet - one pod per node
-- Batch Job - run to completion
-- More principled way to track who owns what resources / fields
-- More principled way to track who is allowed to do what (change the fields)
+- More principled way to track state changes -- who owns what resources / fields / objects
 - Proper state machine for the controller / nodeagent / allocator
-- RepairEngine - responsible for repairing the system
+
+
