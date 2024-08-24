@@ -71,6 +71,15 @@ func (s *server) UpdatePods(ctx context.Context, in *pb.UpdatePodRequest) (*pb.U
 	return &pb.UpdatePodResponse{}, nil
 }
 
+func (s *server) UpdateNodeTaint(ctx context.Context, in *pb.UpdateNodeTaintRequest) (*pb.UpdateNodeTaintResponse, error) {
+	nodeStore := GetNodeStore()
+	err := nodeStore.UpdateNodeTaint(in.Name, in.Tainted)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.UpdateNodeTaintResponse{}, nil
+}
+
 func (s *server) GetNodes(ctx context.Context, in *pb.GetNodeRequest) (*pb.GetNodeResponse, error) {
 	nodeStore := GetNodeStore()
 	nodes := nodeStore.GetNodes(in)

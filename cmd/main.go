@@ -96,14 +96,11 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "nodeStore":
+	case "node":
 		switch os.Args[2] {
-		case "load":
-			load := flag.NewFlagSet("load", flag.ExitOnError)
-			path := load.String("path", "", "path to the node store file")
-			load.Parse(os.Args[3:]) // Adjusted to parse the correct arguments
-			log.Printf("Loading nodes from %s", *path)
-			HandleLoadNode(*path)
+		case "taint":
+			nodeName := os.Args[2]
+			UpdateNodeTaint(name, true)
 		case "print":
 			// Handle print command
 			PrintNodes()

@@ -49,6 +49,21 @@ func GetNodeStore() *NodeStore {
 	return instanceNodeStore
 }
 
+func (ns *NodeStore) UpdateNodeTaint(in *pb.UpdateNodeTaintRequest) (*pb.UpdateNodeTaintResponse, error) {
+	ns.mutex.Lock()
+	defer ns.mutex.Unlock()
+	node, exists := ns.NameToNode[in.Name]
+	if !exists {
+		return nil, &OperationNotAllowedError{
+			Operation: "UpdateNodeTaint",
+			Message:   "Node not found"}
+	}
+	node.Tainted = in.Tainted
+	ns.NameToNode[in.Name] = node
+	ns.NameToNodeProto[in.Name] = CreateProtoForNode(ns, node)
+	return &pb.UpdateNodeTaintResponse{}, nil
+}
+
 func (ns *NodeStore) PrintNodes() error {
 	ns.mutex.Lock()
 	defer ns.mutex.Unlock()

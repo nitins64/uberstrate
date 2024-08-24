@@ -16,6 +16,19 @@ service StateStoreService {
   rpc LoadPods(LoadPodRequest) returns (LoadPodResponse) {}
   rpc GetPods(GetPodRequest) returns (GetPodResponse) {}
   rpc UpdatePods(UpdatePodRequest) returns (UpdatePodResponse) {}
+  rpc UpdateNodes(UpdateNodesRequest) returns (UpdateNodesResponse) {}
+}
+
+message NodeTainted {
+  string node = 1;
+  bool taint = 2;
+}
+
+message UpdateNodesRequest {
+  repeated NodeTainted nodes = 1;
+}
+
+message UpdateNodesResponse {
 }
 
 message UpdatePodRequest {
