@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	StateStoreService_SayHello_FullMethodName    = "/statestore.StateStoreService/SayHello"
-	StateStoreService_LoadNodes_FullMethodName   = "/statestore.StateStoreService/LoadNodes"
-	StateStoreService_PrintNodes_FullMethodName  = "/statestore.StateStoreService/PrintNodes"
-	StateStoreService_GetNodes_FullMethodName    = "/statestore.StateStoreService/GetNodes"
-	StateStoreService_LoadPods_FullMethodName    = "/statestore.StateStoreService/LoadPods"
-	StateStoreService_GetPods_FullMethodName     = "/statestore.StateStoreService/GetPods"
-	StateStoreService_UpdatePods_FullMethodName  = "/statestore.StateStoreService/UpdatePods"
-	StateStoreService_UpdateNodes_FullMethodName = "/statestore.StateStoreService/UpdateNodes"
+	StateStoreService_SayHello_FullMethodName          = "/statestore.StateStoreService/SayHello"
+	StateStoreService_LoadNodes_FullMethodName         = "/statestore.StateStoreService/LoadNodes"
+	StateStoreService_PrintNodes_FullMethodName        = "/statestore.StateStoreService/PrintNodes"
+	StateStoreService_GetNodes_FullMethodName          = "/statestore.StateStoreService/GetNodes"
+	StateStoreService_LoadPods_FullMethodName          = "/statestore.StateStoreService/LoadPods"
+	StateStoreService_GetPods_FullMethodName           = "/statestore.StateStoreService/GetPods"
+	StateStoreService_UpdatePods_FullMethodName        = "/statestore.StateStoreService/UpdatePods"
+	StateStoreService_UpdateNodeTainted_FullMethodName = "/statestore.StateStoreService/UpdateNodeTainted"
 )
 
 // StateStoreServiceClient is the client API for StateStoreService service.
@@ -40,7 +40,7 @@ type StateStoreServiceClient interface {
 	LoadPods(ctx context.Context, in *LoadPodRequest, opts ...grpc.CallOption) (*LoadPodResponse, error)
 	GetPods(ctx context.Context, in *GetPodRequest, opts ...grpc.CallOption) (*GetPodResponse, error)
 	UpdatePods(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
-	UpdateNodes(ctx context.Context, in *UpdateNodesRequest, opts ...grpc.CallOption) (*UpdateNodesResponse, error)
+	UpdateNodeTainted(ctx context.Context, in *UpdateNodeTaintRequest, opts ...grpc.CallOption) (*UpdateNodeTaintResponse, error)
 }
 
 type stateStoreServiceClient struct {
@@ -121,10 +121,10 @@ func (c *stateStoreServiceClient) UpdatePods(ctx context.Context, in *UpdatePodR
 	return out, nil
 }
 
-func (c *stateStoreServiceClient) UpdateNodes(ctx context.Context, in *UpdateNodesRequest, opts ...grpc.CallOption) (*UpdateNodesResponse, error) {
+func (c *stateStoreServiceClient) UpdateNodeTainted(ctx context.Context, in *UpdateNodeTaintRequest, opts ...grpc.CallOption) (*UpdateNodeTaintResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateNodesResponse)
-	err := c.cc.Invoke(ctx, StateStoreService_UpdateNodes_FullMethodName, in, out, cOpts...)
+	out := new(UpdateNodeTaintResponse)
+	err := c.cc.Invoke(ctx, StateStoreService_UpdateNodeTainted_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ type StateStoreServiceServer interface {
 	LoadPods(context.Context, *LoadPodRequest) (*LoadPodResponse, error)
 	GetPods(context.Context, *GetPodRequest) (*GetPodResponse, error)
 	UpdatePods(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
-	UpdateNodes(context.Context, *UpdateNodesRequest) (*UpdateNodesResponse, error)
+	UpdateNodeTainted(context.Context, *UpdateNodeTaintRequest) (*UpdateNodeTaintResponse, error)
 	mustEmbedUnimplementedStateStoreServiceServer()
 }
 
@@ -174,8 +174,8 @@ func (UnimplementedStateStoreServiceServer) GetPods(context.Context, *GetPodRequ
 func (UnimplementedStateStoreServiceServer) UpdatePods(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePods not implemented")
 }
-func (UnimplementedStateStoreServiceServer) UpdateNodes(context.Context, *UpdateNodesRequest) (*UpdateNodesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateNodes not implemented")
+func (UnimplementedStateStoreServiceServer) UpdateNodeTainted(context.Context, *UpdateNodeTaintRequest) (*UpdateNodeTaintResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNodeTainted not implemented")
 }
 func (UnimplementedStateStoreServiceServer) mustEmbedUnimplementedStateStoreServiceServer() {}
 func (UnimplementedStateStoreServiceServer) testEmbeddedByValue()                           {}
@@ -324,20 +324,20 @@ func _StateStoreService_UpdatePods_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StateStoreService_UpdateNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateNodesRequest)
+func _StateStoreService_UpdateNodeTainted_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNodeTaintRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StateStoreServiceServer).UpdateNodes(ctx, in)
+		return srv.(StateStoreServiceServer).UpdateNodeTainted(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StateStoreService_UpdateNodes_FullMethodName,
+		FullMethod: StateStoreService_UpdateNodeTainted_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StateStoreServiceServer).UpdateNodes(ctx, req.(*UpdateNodesRequest))
+		return srv.(StateStoreServiceServer).UpdateNodeTainted(ctx, req.(*UpdateNodeTaintRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -378,8 +378,8 @@ var StateStoreService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StateStoreService_UpdatePods_Handler,
 		},
 		{
-			MethodName: "UpdateNodes",
-			Handler:    _StateStoreService_UpdateNodes_Handler,
+			MethodName: "UpdateNodeTainted",
+			Handler:    _StateStoreService_UpdateNodeTainted_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
