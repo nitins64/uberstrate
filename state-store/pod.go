@@ -1,12 +1,13 @@
 package main
 
 import (
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"os"
 	"reflect"
 	"sync"
 	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pb "gitbub.com/uberstrate/idl"
 	"gopkg.in/yaml.v2"
@@ -116,13 +117,10 @@ func CreateProtoForPod(ps *PodStore, pod Pod) *pb.Pod {
 
 func (ps *PodStore) scheduleLoad() {
 	uptimeTicker := time.NewTicker(5 * time.Second)
-	for {
-		select {
-		case <-uptimeTicker.C:
-			ps.mutex.Lock()
-			ps.loadInternal()
-			ps.mutex.Unlock()
-		}
+	for range uptimeTicker.C {
+		ps.mutex.Lock()
+		ps.loadInternal()
+		ps.mutex.Unlock()
 	}
 }
 

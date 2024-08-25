@@ -155,7 +155,7 @@ func (ns *NodeStore) loadInternal() error {
 	// log.Printf("Found total nodes in Crane %d", len(nodes))
 
 	// if the node is not in the new list, delete it
-	for name, _ := range ns.NameToNode {
+	for name := range ns.NameToNode {
 		condition := func(node Node) bool {
 			return node.Name == name
 		}
@@ -189,13 +189,10 @@ func (ns *NodeStore) loadInternal() error {
 
 func (ns *NodeStore) scheduleLoad() {
 	uptimeTicker := time.NewTicker(5 * time.Second)
-	for {
-		select {
-		case <-uptimeTicker.C:
-			ns.mutex.Lock()
-			ns.loadInternal()
-			ns.mutex.Unlock()
-		}
+	for range uptimeTicker.C {
+		ns.mutex.Lock()
+		ns.loadInternal()
+		ns.mutex.Unlock()
 	}
 }
 
