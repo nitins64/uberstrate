@@ -79,15 +79,15 @@
   cpu: 12
   ram: 1028
   storage: 100000
-#- name: "node-7"
-#  region: "us-east-1"
-#  zone: "e-zone-2"
-#  cluster: "e-zone-2-cluster-1"
-#  os: "linux"
-#  disk_type: "ssd"
-#  cpu: 1000
-#  ram: 8192
-#  storage: 100000
+- name: "node-7"
+  region: "us-east-1"
+  zone: "e-zone-2"
+  cluster: "e-zone-2-cluster-1"
+  os: "linux"
+  disk_type: "ssd"
+  cpu: 1000
+  ram: 8192
+  storage: 100000
 - name: "node-8"
   region: "us-east-1"
   zone: "e-zone-2"

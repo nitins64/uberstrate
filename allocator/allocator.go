@@ -81,6 +81,11 @@ func (s *Allocator) loop() {
 		}
 	}
 
+	log.Printf("Current state:")
+	for _, pod := range podAlls {
+		log.Printf("	Pod:%s running on node:%s", pod.Metadata.Name, pod.Status.NodeUuid)
+	}
+
 	if len(schedulablePods) > 0 {
 		log.Printf("Needs scheduling for %d pods.", len(schedulablePods))
 		for _, pod := range schedulablePods {

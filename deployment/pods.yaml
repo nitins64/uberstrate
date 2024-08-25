@@ -30,17 +30,17 @@
   labels :
     app : "web"
     tier : "frontend"
-#- name : "pod-3"
-#  nodeSelection :
-#    region : "us-east-1"
-#    os : "linux"
-#    disk_type : "ssd"
-#  priority : 10
-#  resource :
-#    cpu : 100
-#    ram : 1028
-#    storage : 100
-#  image : "nginx"
-#  labels :
-#    app : "web"
-#    tier : "frontend"
+- name : "pod-3"
+  nodeSelection :
+    region : "us-east-1"
+    os : "linux"
+    disk_type : "ssd"
+  priority : 10
+  resource :
+    cpu : 100
+    ram : 1028
+    storage : 100
+  image : "nginx"
+  labels :
+    app : "web"
+    tier : "frontend"
