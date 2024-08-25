@@ -192,8 +192,8 @@ func (ps *PodStore) UpdatePods(pod []*pb.Pod) error {
 				Message:   "Pod does not exist"}
 		}
 		ps.NameToPodProto[pod.Metadata.Name] = pod
-		log.Printf("Updated pod name:%s status:%s condition:%s", pod.Metadata.Name,
-			pod.Status.Phase, pod.Status.Condition)
+		log.Printf("Updated pod name:%s status:%s condition:%s assinged-node:%s", pod.Metadata.Name,
+			pod.Status.Phase, pod.Status.Condition, pod.Status.NodeUuid)
 	}
 	return nil
 }

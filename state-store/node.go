@@ -49,19 +49,30 @@ func GetNodeStore() *NodeStore {
 	return instanceNodeStore
 }
 
-func (ns *NodeStore) UpdateNodeTaint(in *pb.UpdateNodeTaintRequest) (*pb.UpdateNodeTaintResponse, error) {
+func (ns *NodeStore) UpdateNodeTaint(in *pb.UpdateNodeTaintRequest) error {
 	ns.mutex.Lock()
 	defer ns.mutex.Unlock()
-	node, exists := ns.NameToNode[in.Name]
-	if !exists {
-		return nil, &OperationNotAllowedError{
-			Operation: "UpdateNodeTaint",
-			Message:   "Node not found"}
+	for _, n := range in.Nodes {
+		node, exists := ns.NameToNodeProto[n.Name]
+		if !exists {
+			return &OperationNotAllowedError{
+				Operation: "UpdateNodeTaint",
+				Message:   "Node not found"}
+		}
+		if n.Tainted {
+			log.Printf("Node: %s is marked tainted. Reason: %s", n.Name, n.Reason)
+			if n.Reason == "" {
+				node.Status.Tainted = "Unknown"
+			} else {
+				node.Status.Tainted = n.Reason
+			}
+
+		} else {
+			node.Status.Tainted = ""
+		}
+		ns.NameToNodeProto[n.Name] = node
 	}
-	node.Tainted = in.Tainted
-	ns.NameToNode[in.Name] = node
-	ns.NameToNodeProto[in.Name] = CreateProtoForNode(ns, node)
-	return &pb.UpdateNodeTaintResponse{}, nil
+	return nil
 }
 
 func (ns *NodeStore) PrintNodes() error {
@@ -111,9 +122,7 @@ func CreateProtoForNode(ns *NodeStore, node Node) *pb.Node {
 				"disk_type": node.DiskType,
 			},
 		},
-		Spec: &pb.NodeSpec{
-			Taint: node.Tainted,
-		},
+		Spec: &pb.NodeSpec{},
 		Status: &pb.NodeStatus{
 			Capacity: &pb.Resource{
 				Cpu:     int64(node.CPU),

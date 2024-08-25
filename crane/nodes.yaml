@@ -7,6 +7,15 @@
   cpu: 10
   ram: 8192
   storage: 100000
+- name: "node-11"
+  region: "us-west-1"
+  zone: "w-zone-1"
+  cluster: "w-zone-1-cluster-1"
+  os: "linux"
+  disk_type: "ssd"
+  cpu: 15
+  ram: 8192
+  storage: 100000
 - name: "node-2"
   region: "us-west-1"
   zone: "w-zone-1"
@@ -34,7 +43,6 @@
 #  cpu: 20
 #  ram: 8192
 #  storage: 200000
-#  tainted: ""
 - name: "node-34"
   region: "us-west-1"
   zone: "w-zone-2"
@@ -44,7 +52,6 @@
   cpu: 20
   ram: 8192
   storage: 200000
-  tainted: "tanited"
 - name: "node-4"
   region: "us-west-1"
   zone: "w-zone-2"

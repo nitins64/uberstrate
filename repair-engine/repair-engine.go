@@ -75,7 +75,7 @@ func (n *RepairEngine) loop() {
 		//log.Printf("Response from gRPC server'n GetNodes total node: %d", len(nodes))
 	}
 
-	log.Printf("Running reconciliation loop...")
+	//log.Printf("Running reconciliation loop...")
 	podAlls, err := n.getPods(true /* all */, "" /* phase */)
 	if err != nil {
 		log.Printf("error calling function GetPods: %v", err)
@@ -83,24 +83,19 @@ func (n *RepairEngine) loop() {
 	}
 	//log.Printf("Response from gRPC server'n GetPods total pod: %d", len(podAlls))
 
-	availableResourcesOnNode := make(map[string]*pb.Resource)
-	for _, node := range nodes {
-		availableResourcesOnNode[node.Metadata.Uuid] = availableResources(node, podAlls)
-	}
-
 	// Now reassign pod that are on Nodes that are tainted.
 	// Change their condition to REALLOCATION_REQUIRED
 	for _, pod := range podAlls {
 		if pod.Status.Phase != pb.PodPhase_PENDING_NODE_ASSIGNMENT &&
 			pod.Status.Condition != pb.PodCondition_REALLOCATION_REQUIRED {
 			condition := func(node *pb.Node) bool {
-				return pod.Status.NodeUuid == node.Metadata.Uuid && node.Spec.Taint != ""
+				return pod.Status.NodeUuid == node.Metadata.Uuid && node.Status.Tainted != ""
 			}
 			firstNode := findFirst(nodes, condition)
 			if firstNode != nil {
 				node := *firstNode
 				log.Printf("Node: %s is tainted: %s. Need to reallocate pod: %s",
-					node.Metadata.Name, node.Spec.Taint, pod.Metadata.Name)
+					node.Metadata.Name, node.Status.Tainted, pod.Metadata.Name)
 				pod.Status.Condition = pb.PodCondition_REALLOCATION_REQUIRED
 				log.Printf("Pod: %s condition changed to REALLOCATION_REQUIRED since node was tainted", pod.Metadata.Name)
 				_, err = n.client.UpdatePods(context.Background(), &pb.UpdatePodRequest{Pods: []*pb.Pod{pod}})
@@ -134,7 +129,7 @@ func (n *RepairEngine) loop() {
 }
 
 func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
-	if node.Spec.Taint != "" {
+	if node.Status.Tainted != "" {
 		return &pb.Resource{
 			Cpu:     0,
 			Ram:     0,

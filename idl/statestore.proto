@@ -20,8 +20,9 @@ service StateStoreService {
 }
 
 message NodeTainted {
-  string node = 1;
-  bool taint = 2;
+  string name = 1;
+  string reason = 2;
+  bool tainted = 3;
 }
 
 message UpdateNodeTaintRequest {

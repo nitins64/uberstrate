@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -25,9 +26,10 @@ func getConnection() (*grpc.ClientConn, error) {
 	return conn, nil
 }
 
-func UpdateNodeTaint(nodeName string, tainted bool) {
+func UpdateNodeTaint(nodeName string, tainted bool, reason string) {
 	c, ctx := getClientWithContext()
-	_, err := c.UpdateNodeTaint(ctx, &pb.UpdateNodeTaintRequest{Name: nodeName, Tainted: tainted})
+	nodes := []*pb.NodeTainted{&pb.NodeTainted{Name: nodeName, Tainted: tainted, Reason: reason}}
+	_, err := c.UpdateNodeTainted(ctx, &pb.UpdateNodeTaintRequest{Nodes: nodes})
 	if err != nil {
 		log.Fatalf("error calling function UpdateNodeTaint: %v", err)
 	}
@@ -54,11 +56,24 @@ func main() {
 	case "node":
 		switch os.Args[2] {
 		case "tainted":
-			nodeName := os.Args[3]
-			UpdateNodeTaint(nodeName, true)
+			tainted := flag.NewFlagSet("tainted", flag.ExitOnError)
+			name := tainted.String("name", "", "Name of Node")
+			reason := tainted.String("reason", "", "Reason")
+			tainted.Parse(os.Args[3:]) // Adjusted to parse the correct arguments
+			if *name == "" {
+				log.Fatalf("name of node is required")
+			}
+
+			UpdateNodeTaint(*name, true, *reason)
+
 		case "untainted":
-			nodeName := os.Args[3]
-			UpdateNodeTaint(nodeName, false)
+			untainted := flag.NewFlagSet("untainted", flag.ExitOnError)
+			name := untainted.String("name", "", "Name of Node")
+			untainted.Parse(os.Args[3:]) // Adjusted to parse the correct arguments
+			if name == nil || *name == "" {
+				log.Fatalf("name Of node is required")
+			}
+			UpdateNodeTaint(*name, false, "")
 		default:
 			log.Fatalf("unknown command: %s", os.Args[2])
 		}

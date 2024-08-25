@@ -15,11 +15,11 @@ message NodeStatus {
     // Node that the capacity of the node is inferred by NodeAgent in actual setting.
     Resource capacity = 1; // The capacity of the node
     string phase = 2; // The phase of the node (pending, running, terminated)
+    string tainted = 3;
 }
 
 // Define the NodeSpec message
 message NodeSpec {
-    string taint = 1; // The taint of the node
 }
 
 // Define the Node message

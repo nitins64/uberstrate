@@ -96,24 +96,6 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "node":
-		switch os.Args[2] {
-		case "taint":
-			nodeName := os.Args[2]
-			UpdateNodeTaint(name, true)
-		case "print":
-			// Handle print command
-			PrintNodes()
-		case "get":
-			get := flag.NewFlagSet("get", flag.ExitOnError)
-			min_generation := get.Int64("min_generation", 0, "")
-			get.Parse(os.Args[3:])
-			// Handle print command
-			GetNodes(*min_generation)
-		default:
-			log.Fatalf("unknown command: %s", os.Args[2])
-		}
-
 	case "podStore":
 		switch os.Args[2] {
 		case "load":

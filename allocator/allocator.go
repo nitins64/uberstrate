@@ -65,7 +65,7 @@ func (s *Allocator) loop() {
 		//log.Printf("Response from gRPC server's GetNodes total node: %d", len(nodes))
 	}
 
-	log.Printf("Running reconcilliation loop")
+	//log.Printf("Running reconcilliation loop")
 	podAlls, err := s.getPods(true /* all */, "" /* phase */)
 	if err != nil {
 		log.Printf("error calling function GetPods: %v", err)
@@ -98,7 +98,7 @@ func (s *Allocator) loop() {
 		availableResourcesOnNode[node.Metadata.Uuid] = availableResources(node, podAlls)
 	}
 
-	schedudedPods := make([]*pb.Pod, 0, len(podAlls))
+	schedulePods := make([]*pb.Pod, 0, len(podAlls))
 	for _, pod := range schedulablePods {
 		log.Printf("Scheduling pod: %s", pod.Metadata.Name)
 		feasibleNodes := make([]*pb.Node, 0, len(nodes))
@@ -140,10 +140,10 @@ func (s *Allocator) loop() {
 				break
 			}
 		}
-		schedudedPods = append(schedudedPods, pod)
+		schedulePods = append(schedulePods, pod)
 	}
 
-	_, err = s.client.UpdatePods(context.Background(), &pb.UpdatePodRequest{Pods: schedudedPods})
+	_, err = s.client.UpdatePods(context.Background(), &pb.UpdatePodRequest{Pods: schedulePods})
 	if err != nil {
 		log.Printf("error calling function UpdatePods: %v", err)
 	}
@@ -183,7 +183,7 @@ func passNodeSelector(node *pb.Node, pod *pb.Pod) bool {
 }
 
 func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
-	if node.Spec.Taint != "" {
+	if node.Status.Tainted != "" {
 		return &pb.Resource{
 			Cpu:     0,
 			Ram:     0,

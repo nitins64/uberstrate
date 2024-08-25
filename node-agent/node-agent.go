@@ -72,7 +72,7 @@ func (n *nodeAgent) loop() {
 	} else {
 		//log.Printf("Response from gRPC server'n GetNodes total node: %d", len(nodes))
 	}
-	log.Printf("Running reconcilliation loop...")
+	//log.Printf("Running reconcilliation loop...")
 	//log.Printf("Getting all podAlls")
 	podAlls, err := n.getPods(true /* all */, "" /* phase */)
 	if err != nil {
@@ -133,7 +133,7 @@ func (n *nodeAgent) loop() {
 }
 
 func availableResources(node *pb.Node, pods []*pb.Pod) *pb.Resource {
-	if node.Spec.Taint != "" {
+	if node.Status.Tainted != "" {
 		return &pb.Resource{
 			Cpu:     0,
 			Ram:     0,
